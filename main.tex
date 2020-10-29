@@ -3,6 +3,9 @@
 
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{babel,automata,positioning,arrows}
+\newtheorem{ejemplo}{Ejemplo}
 
 \title{Auómatas para la vinculación parcial de servicios}
 % \subtitle{Your subtitle (if there's one)}
@@ -72,26 +75,127 @@ Una interfaz de servicios ofrece propiedades a potenciales clientes y requiere p
 \end{frame}
 
 
-\begin{frame}{Asynchronous Relational Nets}
-Las ARNs están compuestas de:
+\begin{frame}{Asynchronous Relational Nets características}
+
 \begin{itemize}
+    \item Modelo basado en orquestación: requieren un servicio que coordine el funcionamiento del sistema compuesto por,
+
     \item Un hipergrafo $\langle X,E \rangle$ donde $X$ es el conjunto finito de nodos (denominados puertos) y $E$ el conjunto de hiper ejes que se dividen por su función en hiper ejes de cómputo y de comunicación
     
     \item Tres funciones de etiquetado que asignan:
         \begin{itemize}
-            \item Un puerto $M_x$ a cada nodo de $X$
-            \item Un proceso a cada hiper eje de cómputo 
-            \item Una conexión a cada hiper eje de comunicación
+            \item[o] Un puerto $M_x$ a cada nodo de $X$
+            \item[o] Un proceso a cada hiper eje de cómputo 
+            \item[o] Una conexión a cada hiper eje de comunicación
         \end{itemize}
-    \item Modelo basado en orquestación: requieren un servicio que coordine el funcionamiento del sistema
 \end{itemize}
 
 \end{frame}
 
+\begin{frame}{ARNs:Semántica Operacional}
+    Un aporte al modelo es el agregado de una semántica operacional que permitiera modelar la capacidad de composición parcial. Para esto los hiper ejes (tanto de comunicación como de cómputo) pasan a ser modelados con autómatas de Muller.
+    \begin{itemize}
+        \item[\textbf{Pro:}] Esta modificación trae a las ARNs el concepto de reconfiguración y ejecución dinámica, y permite la posibilidad de hacer chequeo de compliance (que la visión global sea igual que la local) entre un conjunto de participantes.
+        
+        \item[\textbf{Contra:}]Los autómatas de Muller sirven para modelar cómputo pero no son compatibles con la noción de comunicación.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Communicating Relational Networks}
+   La modificación de las ARNs seguía sin satisfacer del todo los ideales de SOC. Para resolver esto surgen las Communicating Relational Networks (CRNs) como variante de las ARNs con las siguientes modificaciones
+    \begin{itemize}
+        \item Los hiper ejes pasan a modelarse con global graphs.
+        \item Los puertos ahora son communicating finite state machines (CFSMs).
+        \item Cambia a un modelo basado en la idea de coreografía. Es decir la comunicación se organiza en base a interacciones entre los componentes sin necesidad de un servicio que controle.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{CRNs: Características}
+Esta modificación trae una serie de ventasjas:
+\begin{enumerate}
+    \item Chequeo de compliance más sencillo: o bien probando que la proyección del global graph es bisimilar a la de la CFSM correspondiente o bien probando que las CFSMs cumplen con la condición de General Multiparty Compatibility (GMC)
+    \item El enfoque de coreografía se acerca a proveer una visión donde los distintos servicios se coordinan entre sí sin necesidad de un servicio que se ocupe específicamente de esa tarea.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Communicating Finite State Machines}
+Son un tipo de autómatas de comunicación asincrónica donde los participantes intercambian mensajes a través de canales FIFO. Se definen sobre un conjunto de mensajes $\mathcal{M}$ como una estructura $\langle Q, \mathcal{C}, q_0, \mathcal{M}, \delta \rangle$. Donde $Q$ es el conjunto de estados, $\mathcal{C}$ el conjunto de canales de comunicación (uno en cada sentido por cada par de participantes), $q_0 \in Q$ el estado inicial y $\delta \in Q \times \{!,?\} \times \mathcal{M} \times Q$ la relación de transición.
+
+\begin{center}
+\begin{tabular}{ccc}
+   p &   r & s\\
+\begin{tikzpicture}[->, thick]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [right= of q_0 ] {$q_1$};
+  \node[state] (q_2) [below= of q_0 ] {$q_2$};
+ \node[state] (q_3) [right= of q_2 ] {$q_3$};
+ \draw[]        
+        (q_0) edge[above] node{pr!a} (q_1)
+        (q_0) edge[right] node{sp?b} (q_2)
+        (q_1) edge[right] node{sp?b} (q_3)
+        (q_2) edge[above] node{pr!a} (q_3)
+        ; 
+\end{tikzpicture} 
+&
+\begin{tikzpicture}[->, thick]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+
+ \draw[]        
+        
+        (q_0) edge[right] node{pr?a} (q_1)
+        
+        ;
+\end{tikzpicture} 
+&
+\begin{tikzpicture}[->, thick]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+
+ \draw[]        
+        
+        (q_0) edge[right] node{sp!b} (q_1)
+        
+        ;
+\end{tikzpicture} 
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{Global Graphs y GMC}
+Un Global Graph es un grafo etiquetado $\langle V, A, \Lambda \rangle$ definido sobre un conjunto de participantes $\mathcal{P}$ y un conjunto de mensajes $\mathcal{M}$
+    
+\end{frame}
+
+\begin{frame}{Problemas a Resolver}
+\begin{enumerate}
+    \item Si bien los métodos de vinculación y chequeo de compliance son más sencillos tienen una desventaja respecto a la versión anterior de la ARNs. \\
+    \item Para poder hacer el chequeo de compliance es necesario que estén presentes todos los participantes de la comunicación. Es decir, se pierde la idea de vinculación dinámica porque sí o sí todos los servicios que van a ser requeridos tienen que ser conocidos.\\
+    \item Para solucionar estos problemas buscamos un formalismo con mecanismo de composición que permita proyectarse a CFSMs y recuperar la noción de composición parcial.
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
+
+Los Autómatas Finitos de Comunicación Asincrónica (AFCA):
+\begin{itemize}
+    \item Comunicación externa
+    \item Cómputo 
+    \item Composición parcial a través de la internalización de la comunicación externa de los participantes compuestos. 
+    \item La interfaz de comunicación externa se proyecta en una forma de communicating machines
+
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
+La comunicación externa es a través de canales como en las communicating machines. Admite al menos dos canales (uno en cada sentido) entre cada par de participantes.
+
+    
+\end{frame}
 
 \subsection{Tables and Figures}
-
-
 
 \begin{frame}{Tables and Figures}
 
@@ -147,15 +251,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet massa in
 \end{column}
 
 \end{columns}
-\end{frame}
-
-
-
-\begin{frame}
-\frametitle{Lorem Ipsum}
-
-\includegraphics[width=.65\textwidth,height=.5\textheight]{photo}
-
 \end{frame}
 
 
