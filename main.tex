@@ -119,7 +119,7 @@ Esta modificación trae una serie de ventasjas:
 \end{frame}
 
 \begin{frame}{Communicating Finite State Machines}
-Son un tipo de autómatas de comunicación asincrónica donde los participantes intercambian mensajes a través de canales FIFO. Se definen sobre un conjunto de mensajes $\mathcal{M}$ como una estructura $\langle Q, \mathcal{C}, q_0, \mathcal{M}, \delta \rangle$. Donde $Q$ es el conjunto de estados, $\mathcal{C}$ el conjunto de canales de comunicación (uno en cada sentido por cada par de participantes), $q_0 \in Q$ el estado inicial y $\delta \in Q \times \{!,?\} \times \mathcal{M} \times Q$ la relación de transición.
+Son un tipo de autómatas de comunicación asincrónica donde los participantes intercambian mensajes a través de canales FIFO. Se definen sobre un conjunto de mensajes $\mathcal{M}$ como una estructura $\langle Q, \mathcal{C}, q_0, \mathcal{M}, \delta \rangle$. Donde $Q$ es el conjunto de estados, $\mathcal{C}$ el conjunto de canales de comunicación (uno en cada sentido por cada par de participantes), $q_0 \in Q$ el estado inicial y $\delta \subseteq Q \times \{!,?\} \times \mathcal{M} \times Q$ la relación de transición.
 
 \begin{center}
 \begin{tabular}{ccc}
@@ -163,7 +163,14 @@ Son un tipo de autómatas de comunicación asincrónica donde los participantes 
 \end{frame}
 
 \begin{frame}{Global Graphs y GMC}
-Un Global Graph es un grafo etiquetado $\langle V, A, \Lambda \rangle$ definido sobre un conjunto de participantes $\mathcal{P}$ y un conjunto de mensajes $\mathcal{M}$
+Un Global Graph es un grafo etiquetado $\langle V, A, \Lambda \rangle$ definido sobre un conjunto de participantes $\mathcal{P}$ y un conjunto de mensajes $\mathcal{M}$. El mismo se compone de un conjunto de vértices $V$, un conjunto de ejes $A \subseteq V \times V$ y una función de etiquetado $\Lambda: A \rightarrow L$. 
+
+Dado un conjunto de participantes $\mathcal{P}$ y sus respectivas CFSMs $M_p$ llamamos Communicating System (CS) a la tupla $S=(M_p)_{p \in \mathcal{P}}$ y un par $s=\langle \overrightarrow{q} ; \overrightarrow{\omega} \rangle$ a una configuración de $S$. General Multiparty Compatibility (GMC) es una condición sólida y completa para construir global graphs a partir de un CS. La condición de GMC garantiza que si el CS es seguro, es decir que carece de configuraciones de: 
+\begin{itemize}
+    \item Deadlock
+    \item Recepción no especificada
+    \item Mensajes huérfanos
+\end{itemize}
     
 \end{frame}
 
@@ -178,20 +185,55 @@ Un Global Graph es un grafo etiquetado $\langle V, A, \Lambda \rangle$ definido 
 
 \begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
 
-Los Autómatas Finitos de Comunicación Asincrónica (AFCA):
+Los Autómatas Finitos de Comunicación Asincrónica (AFCA) son una clase de autómatas de comunicación de la forma $A_\mathcal{P} = \langle Q, B, \mathcal{C}, \Sigma, \delta, q_0, F\rangle$ que poseen:
 \begin{itemize}
-    \item Comunicación externa
-    \item Cómputo 
-    \item Composición parcial a través de la internalización de la comunicación externa de los participantes compuestos. 
-    \item La interfaz de comunicación externa se proyecta en una forma de communicating machines
+    \item Comunicación externa a través de los canales en $\mathcal{C}$
+    \item Transiciones internas o de cómputo,
+    \item Comunicación interna a través de buffers
+    \item Un mecanismo de composición que admite composición parcial transformando la comunicación externa compartida entre participantes en comunicación interna del autómata resultante
+\end{itemize} 
 
-\end{itemize}
+La interfaz de comunicación externa de un AFCA se puede proyectar en una communicating machine. Para lo cual definimos las Multichannel Communicating Finite State Machines (mCFSM). CFSMs con más de un par de canales entre cada par de participantes
+\end{frame}
+
+\begin{frame}{AFCA ejemplo}
+Ejemplo de un Autómata Finito de Comunicación Asincrónica
+Considere el AFCA $S= \langle \{q_0,..,q_5\},\{b_0\},\{sr_1,sr_2,rs_1\}, \Sigma_A, \delta_A, q_0, \{q_4\} \rangle$. Donde $\Sigma =\{wait, b_0 \ll m_1,b_0 \gg m_1, Out(sr_1,a),Out(sr_2,c), In(rs_1,b),In(rs_2,d) \}$
+\begin{center}
+\begin{tikzpicture}[->, thick]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [right= 1.5cm of q_0 ] {$q_1$};
+ \node[state] (q_5) [right= 1.8cm of q_1 ] {$q_5$};
+ \node[state] (q_2) [below= of q_0 ] {$q_2$};
+ \node[state] (q_3) [right= 1.5cm of q_2 ] {$q_3$};
+ \node[state,accepting] (q_4) [right= 1.8cm of q_3 ] {$q_4$};
+ \draw[]        
+        (q_0) edge[above] node{$b_0 \ll m_1$} (q_1)
+        (q_0) edge[left] node{$Out(sr_1,a)$} (q_2)
+        (q_1) edge[above] node{$Out(sr_2,c)$} (q_5)
+        (q_2) edge[above] node{$In(rs_1,b)$} (q_3)
+        (q_2) edge[bend right, below] node{$wait$} (q_4)
+        (q_3) edge[above] node{$In(rs_2,d)$} (q_4)
+        (q_5) edge[right] node{$b_0 \gg m_1$} (q_4)
+        ;
+\end{tikzpicture}
+\end{center}
+En el ejemplo podemos ver los tres tipos de transiciones que los AFCA pueden realizar. 
+\end{frame}
+
+\begin{frame}{Composición parcial}
     
 \end{frame}
 
-\begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
-La comunicación externa es a través de canales como en las communicating machines. Admite al menos dos canales (uno en cada sentido) entre cada par de participantes.
+\begin{frame}{MultiChannel CFSM y GMC}
+    
+\end{frame}
 
+\begin{frame}{Equivalencia comunicacional}
+    
+\end{frame}
+
+\begin{frame}{Weak determinacy}
     
 \end{frame}
 
