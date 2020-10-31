@@ -4,6 +4,8 @@
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
 \usepackage{tikz}
+\usepackage{xypic}
+\usepackage{graphicx}
 \usetikzlibrary{babel,automata,positioning,arrows}
 \newtheorem{ejemplo}{Ejemplo}
 
@@ -222,77 +224,143 @@ En el ejemplo podemos ver los tres tipos de transiciones que los AFCA pueden rea
 \end{frame}
 
 \begin{frame}{Composición parcial}
+La principal motivación de este formalismo es recuperar la funcionalidad de composición parcial como modelado de la reconfiguración dinámica en tiempo de ejecución. Para esto los AFCA incorporan un mecanismo apropiado:
+\begin{itemize}
+    \item Decimos que un conjunto de AFCA son compatibles para componer si vale $\Sigma_{p_i} \cap \Sigma_{p_j}= \emptyset$ y $B_{p_i} \cap B_{p_j} = \emptyset$ para todo $p_i, p_j \in \mathcal{P}$
+    \item $Q_\mathcal{P}= \Pi_{p_i \in \mathcal{P}} Q_{p_i}$ El conjunto de estados resultantes es el producto de los conjuntos de los componentes
+    \item $B_\mathcal{P} = \bigcup_{p_i \in \mathcal{P}} B_{p_i} \cup \{ \omega_c \ | \ \mbox{ existen } p_i, p_j \in \mathcal{P} \mbox{ tales que } c \in \mathcal{C}_{p_i} \cap \mathcal{C}_{p_j} \}$ El conjunto de buffers internos es la unión de los de los componenetes más uno nuevo por cada canal de comunicación externa compartido entre cada par de AFCA
+    \item El 
+\end{itemize}
     
 \end{frame}
+
+\begin{frame}{Composición parcial ejemplo}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[->, thick, scale=0.8, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [right= 1.5cm of q_0 ] {$q_1$};
+ \node[state] (q_2) [below= of q_0 ] {$q_2$};
+ \node[state] (q_3) [right= 1.5cm of q_2 ] {$q_3$};
+ \node[state, accepting] (q_4) [below= of q_3 ] {$q_4$};
+	
+ \draw[]        
+        (q_0) edge[above] node{out(PR,a)} (q_1)
+        (q_0) edge[left] node{in(SP,b)} (q_2)
+        (q_1) edge[right] node{in(SP,b)} (q_3)
+        (q_2) edge[above] node{out(PR,a)} (q_3)
+        (q_3) edge[right] node{$int_p$} (q_4)
+        ; 
+\end{tikzpicture} 
+\ 
+\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
+ \draw[]        
+        
+        (q_0) edge[right] node{$int_r$} (q_1)
+        (q_1) edge[right] node{in(pr,a)} (q_2)
+        ;
+\end{tikzpicture} 
+\ 
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state, accepting] (q_1) [below= of q_0 ] {$q_1$};
+
+ \draw[]        
+        
+        (q_0) edge[right] node{out(sp,b)} (q_1)
+        
+        ;
+\end{tikzpicture} 
+\end{center}
+% \caption{Autómatas finitos de comunicación asincrónica $A_P$, $A_R$, $A_S$.}
+\label{a_i}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Composición parcial ejemplo}
+\begin{figure}[H]
+\begin{tabular}{cc}
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)  {$q_{00}$}; 
+ \node[state] (q_1) [below right=  and 3 of q_0] {$q_{01}$};
+ \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
+ \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
+ \node[state] (q_4) [below= of q_0] {$q_{10}$};
+  \node[state] (q_5) [below left = of q_3 ] {$q_{32}$};
+  \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
+  \node[state] (q_7) [below = 1.5 of q_6 ] {$q_{31}$};
+  \node[state] (q_8) [below left = and 3 of q_0 ] {$q_{20}$};
+  \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
+  \node[state] (q_10) [below left= of q_7] {$q_{41}$};
+ \node[state,accepting] (q_11) [below= 3cm of q_7] {$q_{42}$};
+ \draw[]        
+        (q_0) edge[above] node{$int_r$} (q_1)
+        (q_0) edge[above] node{$in(SP,b)$} (q_8)
+        (q_0) edge[right] node{$PR \ll a$} (q_4)
+        (q_1) edge[right] node{$PR \ll a$} (q_2)
+ 		(q_2) edge[right] node{$PR \gg a$} (q_3)
+		(q_2) edge[right] node{$in(SP,b)$} (q_7)
+        (q_3) edge[right] node{$in(SP,b)$} (q_5) 
+        (q_4) edge[right] node{$in(SP,b)$} (q_6)
+        (q_6) edge[left] node{$int_r$} (q_7)
+        (q_7) edge[right] node{$PR \gg a$} (q_5)
+        (q_7) edge[left] node{$int_p$} (q_10)
+        (q_10) edge[left] node{$PR \gg a$} (q_11)
+        (q_8) edge[left] node{$int_r$} (q_9)
+        (q_8) edge[left] node{$PR \ll a$} (q_6)
+        (q_9) edge[left] node{$PR \ll a$} (q_7)
+        (q_5) edge[right] node{$int_p$} (q_11)
+        ;
+\end{tikzpicture}
+     & 
+
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+
+ \draw[]        
+        
+        (q_0) edge[right] node{out(sp,b)} (q_1)
+        
+        ;
+\end{tikzpicture}
+\end{tabular}
+
+\
+
+% \caption{Composición parcial de los AFCAs de la Fig.~\ref{a_i}.}
+% \label{A-parcial}
+\end{figure}
+
+    
+\end{frame}
+
 
 \begin{frame}{MultiChannel CFSM y GMC}
     
 \end{frame}
 
 \begin{frame}{Equivalencia comunicacional}
+
+\begin{figure}[H]
+$$
+\xymatrix{   
+	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+	  {A} \ar[r]_{\Pi'} \ar[d]_{\Pi} & \mathcal{L}' & = & {\mathcal{L}}  \\
+	  \emptyset
+}
+$$
+% \caption{La composición de componentes asincrónicas preserva la semántica asincrónica de su interfaz de comunicación.}
+\end{figure}
     
 \end{frame}
 
 \begin{frame}{Weak determinacy}
     
-\end{frame}
-
-\subsection{Tables and Figures}
-
-\begin{frame}{Tables and Figures}
-
-\begin{itemize}
-\item Use \texttt{tabular} for basic tables --- see Table~\ref{tab:widgets}, for example.
-\item You can upload a figure (JPEG, PNG or PDF) using the files menu. 
-\item To include it in your document, use the \texttt{includegraphics} command (see the comment below in the source code).
-\end{itemize}
-
-% \begin{table}
-% \centering
-% \begin{tabular}{l r}
-% \tableheadrow
-% \tableheadcol{Item} & \tableheadcol{Quantity} \\
-% Widgets & 42 \\
-% Gadgets & 13
-% \end{tabular}
-% \caption{\label{tab:widgets}An example table.}
-% \end{table}
-\end{frame}
-
-\begin{frame}
-\frametitle{Figure Example}
-
-Commands to include a figure:
-
-\begin{figure}
-\includegraphics[width=0.4\textwidth]{chart}
-\caption{\label{fig:your-figure}Caption goes here.}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\frametitle{Text in Two Columns}
-
-\begin{columns}[T]
-
-\begin{column}{0.48\textwidth}
-\small
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet massa in dolor pellentesque tempor. Integer nunc. 
-\end{column}
-
-\begin{column}{0.48\textwidth}
-\begin{itemize}
-\item First bullet goes here
-  \begin{itemize}
-  \item Secondary bullet goes here
-    \begin{itemize}
-    \item Tertiary bullet goes here
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-\end{column}
-
-\end{columns}
 \end{frame}
 
 
