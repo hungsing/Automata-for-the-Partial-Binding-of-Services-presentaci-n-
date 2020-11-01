@@ -3,12 +3,18 @@
 
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
+\usepackage{amsfonts,amsmath,amsthm} % Math packages
+\usepackage{mathabx}
+\usepackage{mathtools}
 \usepackage{tikz}
 \usepackage{xypic}
 \usepackage{graphicx}
+\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage{float}
+% \usepackage[shortlabels]{enumitem}
 \usetikzlibrary{babel,automata,positioning,arrows}
+\newcommand{\Tau}{\mathrm{T}}
 \newtheorem{ejemplo}{Ejemplo}
-
 \title{Auómatas para la vinculación parcial de servicios}
 % \subtitle{Your subtitle (if there's one)}
 \author{Ezequiel Davidovich Caballero}
@@ -224,17 +230,20 @@ En el ejemplo podemos ver los tres tipos de transiciones que los AFCA pueden rea
 \end{frame}
 
 \begin{frame}{Composición parcial}
-La principal motivación de este formalismo es recuperar la funcionalidad de composición parcial como modelado de la reconfiguración dinámica en tiempo de ejecución. Para esto los AFCA incorporan un mecanismo apropiado:
+Para modelar la reconfiguración dinámica en tiempo de ejecución los AFCA incorporan un mecanismo de composición que admite composición parcial:
 \begin{itemize}
     \item Decimos que un conjunto de AFCA son compatibles para componer si vale $\Sigma_{p_i} \cap \Sigma_{p_j}= \emptyset$ y $B_{p_i} \cap B_{p_j} = \emptyset$ para todo $p_i, p_j \in \mathcal{P}$
     \item $Q_\mathcal{P}= \Pi_{p_i \in \mathcal{P}} Q_{p_i}$ El conjunto de estados resultantes es el producto de los conjuntos de los componentes
     \item $B_\mathcal{P} = \bigcup_{p_i \in \mathcal{P}} B_{p_i} \cup \{ \omega_c \ | \ \mbox{ existen } p_i, p_j \in \mathcal{P} \mbox{ tales que } c \in \mathcal{C}_{p_i} \cap \mathcal{C}_{p_j} \}$ El conjunto de buffers internos es la unión de los de los componenetes más uno nuevo por cada canal de comunicación externa compartido entre cada par de AFCA
-    \item El 
+    \item $\Sigma_\mathcal{P} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i}$ con $\Sigma_{\mathcal{P}\mathit{Ex}} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i\mathit{Ex}} \setminus \Sigma_{p_i \mapsto p_j}$ y $\Sigma_{\mathcal{P}\mathit{Buff}} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i\mathit{Buff}} \cup \Sigma_{p_i \mapsto p_j}$,
+    \item $\delta_\mathcal{P}$ 
+    
 \end{itemize}
     
 \end{frame}
 
 \begin{frame}{Composición parcial ejemplo}
+Tomemos estos tres AFCA como ejemplo, podemos ver que cumplen la condición necesaria de compatibilidad.
 
 \begin{figure}[H]
 \begin{center}
@@ -283,8 +292,7 @@ La principal motivación de este formalismo es recuperar la funcionalidad de com
 
 \begin{frame}{Composición parcial ejemplo}
 \begin{figure}[H]
-\begin{tabular}{cc}
-\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
  \node[state,initial] (q_0)  {$q_{00}$}; 
  \node[state] (q_1) [below right=  and 3 of q_0] {$q_{01}$};
  \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
@@ -316,8 +324,7 @@ La principal motivación de este formalismo es recuperar la funcionalidad de com
         (q_5) edge[right] node{$int_p$} (q_11)
         ;
 \end{tikzpicture}
-     & 
-
+ \
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
@@ -325,26 +332,31 @@ La principal motivación de este formalismo es recuperar la funcionalidad de com
  \draw[]        
         
         (q_0) edge[right] node{out(sp,b)} (q_1)
-        
+    
         ;
 \end{tikzpicture}
-\end{tabular}
-
-\
 
 % \caption{Composición parcial de los AFCAs de la Fig.~\ref{a_i}.}
 % \label{A-parcial}
 \end{figure}
-
-    
 \end{frame}
 
 
 \begin{frame}{MultiChannel CFSM y GMC}
+\begin{itemize}
+    \item Multichannel Communicating Finite State Machines (mCFSM). Son una extensión CFSMs con múltiples canales (al menos dos, uno en cada sentido) entre cada par de participantes.
     
+    \item Interfaz de comunicación de AFCA: mediante un procedimiento extraemos el comportamiento comunicacional en la forma de una mCFSM
+    
+    \item Sistema emulado: Dado un multichannel CS $(M_p)_{p \in \mathcal{P}}$, agrandamos el conjunto $ \mathcal{P}$ agregando un participante adicional por cada canal en el sistema original $\mathcal{P}'=\mathcal{P} \cup \bigcup_{p \in \mathcal{P}} \{p^{pq_n} \ | \ pq_n \in \mathcal{C}_p \} \cup \bigcup_{p \in \mathcal{P}} \{p^{qp_n} \ | \ qp_n \in \mathcal{C}_p \}$. De este modo obtenemos un conjunto de CFSMs
+    
+    \item GMC: Como el sistema emulado preserva errores comunicacionales, podemos utilizar el criterio de GMC para el chequeo de compliance entre componentes
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}{Equivalencia comunicacional}
+Queremos garantizar que dado un conjunto de AFCA compatibles, y sus respectivas mCFSMs la composición total preserva la semántica comunicacional.  
 
 \begin{figure}[H]
 $$
@@ -359,9 +371,188 @@ $$
     
 \end{frame}
 
-\begin{frame}{Weak determinacy}
-    
+\begin{frame}{Equivalencia comunicacional problema}
+
+El primer problema es que no siempre ocurre. Como en este caso.
+
+\begin{figure}[H]
+\begin{center}
+\label{fig:ejemplo-weak-determinacy}
+\subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
+\label{fig:weak determinacy afca}
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below = of q_0 ] {$q_1$};
+ \node[state] (q_2) [right = of q_1 ] {$q_2$};
+ \node[state] (q_3) [below = of q_1 ] {$q_3$};
+ \node[state] (q_4) [below = of q_2 ] {$q_4$};
+ \draw[]        
+        (q_0) edge[left] node{int1} (q_1)
+        (q_0) edge[right] node{int2} (q_2)
+        (q_1) edge[left] node{in(sp,a)} (q_3)
+        (q_2) edge[right] node{in(sp,b)} (q_4)
+        ; 
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below = of q_0 ] {$q_1$};
+  \node[state] (q_2) [right = of q_1] {$q_2$};
+ \draw[]        
+        (q_0) edge[left] node{out(sp,a)} (q_1)
+        (q_0) edge[right] node{out(sp,b)} (q_2)
+        ; 
+\end{tikzpicture}
+}
+
+\subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
+\label{fig:weak determinacy mCFSM}
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$[q_0]$}; 
+  \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
+ \node[state] (q_2) [right = of q_1 ] {$[q_2]$};
+ \draw[]        
+        (q_0) edge[left] node{sp?a} (q_1)
+        (q_0) edge[right] node{sp?b} (q_2)
+        ; 
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$[q_0]$}; 
+ \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
+  \node[state] (q_2) [right = of q_1 ] {$[q_2]$};
+ \draw[]        
+        (q_0) edge[left] node{sp!a} (q_1)
+        (q_0) edge[right] node{sp!b} (q_2)
+        ; 
+\end{tikzpicture}
+}
+\end{center}
+\label{fig:weakdeterminacyviolation}
+\end{figure}
 \end{frame}
 
+\begin{frame}{Weak determinacy}
+Primero buscamos un criterio que garantice la preservación de la comunicación. Y con este criterio vemos un método de "extraer" la comunicación interna de un AFCA. Para un AFCA $A= \langle Q, \mathcal{C}, B, \Sigma, \delta, q_0, F \rangle$
+
+\begin{enumerate}
+    \item Weak Determinacy: Sea $\Sigma' \subseteq \Sigma$ un conjunto de etiquetas a silenciar. Se dice que $A$ es \emph{weak determinate sobre $\Sigma'$} si para todo $q, q', q'' \in Q$ y para todo $s, s' \in \Sigma^*$ tal que $\widehat{s}_{\Sigma'} = \widehat{s'}_{\Sigma'}$, $q \xrightarrow{s} q'$ y $q \xrightarrow{s'} q''$, $q' \sim_{\Sigma'} q''$.\\
+
+    \item Decimos que si $A$ es weak determinate, entonces dados dos estados $q, q' \in Q$ tales que $q \xrightarrow{\sigma} q'$ con $\sigma \in \Sigma_{\mathit{Int}}^*$,  $q \sim_{\Sigma_\mathit{Int}} q'$.
+    
+    \item Si $A$ weak determinate, definimos equivalencia de estados por comunicación interna como $q \Rightarrow q'$ si y solo si existe $\sigma \in \Sigma_\mathit{Int}$ tal que $q \xrightarrow{\sigma} q'$. Luego, $[q]_m$, \emph{la clase de equivalencia por comunicación interna} de $q$, se define como $[q]_m = \{q'\ |\ q \Rightarrow^\bullet q'\}$. 
+    
+    \item Decimos que dos clases de equivalencia están relacionadas $[q]_m \xrightarrow{\sigma} [q']_m$ sii $\exists q_i \in [q]_m, q'_i \in [q']_m$ tales que $q_i \xrightarrow{\sigma} q'_i \in \delta_{\text{Buff}}$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Proyección de comunicación interna}
+Tomando el AFCA $A$, weak determinate sin transiciones de comunicación externa, definimos la Proyección de Comunicación Interna $\Tau(A)$ como la proyección de la semántica de comunicación de $\mathcal{A}$. Llamamos $\widehat{\mathcal{A}}$ al sistema de transición etiquetado resultante y decimos que $\Tau (\langle Q, B, \mathcal{C}, \Sigma, q_0, \delta, F \rangle)= \langle \widehat{Q}, B, \widehat{q_0}, \widehat{\Delta} \rangle$ tal que:
+\begin{itemize}
+    \item $ \widehat{Q} = \{ \langle [q]_m, \overrightarrow{\Omega} \rangle | q \in Q \land \overrightarrow{\Omega} = (\Omega_b)_{b \in B}$ con $\Omega_b \in \mathcal{M}^* \}$ Cada estado del sistema de transición resultante es una configuración de $\mathcal{A}$ para una clase de equivalencia por comunicación interna,
+    \item $B$ es el conjunto de buffers de $\mathcal{A}$ que se utilizan en las aristas del LTS para denotar de comunicación interna
+    \item $\widehat{q_0}= \langle q_0, \Omega \rangle$ es el estado inicial de  donde $q_0$ es el estado inicial de $\mathcal{A}$ y $\Omega = \langle [], \ldots, [] \rangle$ es el conjunto de buffers en su estado inicial sin mensajes, y
+    \item $\widehat{\Delta}= \{\langle \langle q_i, \Omega \rangle, \widehat{\sigma},\langle q_j, \Omega' \rangle \rangle | q_i, q_j \in Q, \widehat{\sigma} \in \{B \times \{\gg, \ll\} \times \mathcal{M}\} \land \exists \sigma \in \Sigma$ tal que  $[q_i]_m \xrightarrow{\sigma} [q_j]_m \}$. Definimos $\widehat{\Delta}$ como la relación de transición de $\widehat{\mathcal{A}}$. Un estado de $\widehat{q_j}$ es alcanzable desde otro $\widehat{q_i}$ si la clase de equivalencia $[q_j]_m$ es alcanzable desde $[q_i]_\mathcal{M}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Proyección de comunicación interna ejemplo}
+Dado el AFCA compuesto $\mathcal{A}= \langle \{q_{000},\ldots,q_{121}\}, \emptyset, \{PR,SP\}, \Sigma_{\mathcal{A}}, \delta_{\mathcal{A}}, \{q_{000}\}, \{q_{421}\} \rangle$
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_{000}$}; 
+ \node[state] (q_1) [right= 1.5cm of q_0 ] {$q_{100}$};
+ \node[state] (q_2) [right = 1.5 of q_1 ] {$q_{110}$};
+ \node[state] (q_12) [above right= 2 of q_2 ] {$q_{111}$};
+  \node[state] (q_3) [below right= 2 of q_2 ] {$q_{120}$};
+  \node[state] (q_4) [right = 3.1 of q_2 ] {$q_{121}$};
+  \node[state] (q_5) [below= 4 of q_0] {$q_{001}$};
+  \node[state] (q_6) [right = 1.5cm of q_5] {$q_{201}$};
+   \node[state] (q_7) [above right = 2 of q_6 ] {$q_{301}$};
+  \node[state] (q_11) [below = 3.5 of q_7] {$q_{211}$};
+  \node[state] (q_8) [right = 3.5 of q_6] {$q_{311}$};
+  \node[state] (q_9) [above right = 2 of q_8 ] {$q_{321}$};
+  \node[state] (q_13) [below right= 2 of q_8 ] {$q_{411}$};
+ \node[state,accepting] (q_10) [right= 3.5cm of q_8 ] {$q_{421}$};
+ \draw[]        
+        (q_0) edge[above] node{$PR \ll a$} (q_1)
+        (q_1) edge[above] node{$int_r$} (q_2)
+		(q_2) edge[left] node{$PR \gg a$} (q_3)
+		(q_2) edge[left] node{$SP \ll b$} (q_12)
+		(q_12) edge[left] node{$PR \gg a$} (q_4)
+        (q_3) edge[left] node{$SP \ll b$} (q_4) 
+        (q_4) edge[right] node{$SP \gg b$} (q_9)
+        (q_0) edge[left] node{$SP \ll b$} (q_5)
+        (q_5) edge[below] node{$SP \gg b$} (q_6)
+        (q_6) edge[left] node{$PR \ll a$} (q_7)
+        (q_6) edge[below] node{$int_r$} (q_11)
+        (q_11) edge[right] node{$PR \ll a$} (q_8)
+        (q_7) edge[right] node{$int_r$} (q_8)
+        (q_8) edge[right] node{$int_p$} (q_13)
+        (q_8) edge[right] node{$PR \gg a$} (q_9)
+        (q_13) edge[right] node{$PR \gg a$} (q_10)
+        (q_9) edge[above] node{$int_p$} (q_10)
+        ;
+\end{tikzpicture}
+\end{center}
+% \caption{Composición de los AFCAs de la Fig.~\ref{a_i}.}
+\label{A}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Proyeción de comunicación interna}
+\begin{figure}[H]
+
+\begin{center}
+\begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
+    \node[state,initial] (q_0) {$[q_{000}],\epsilon, \epsilon$}; 
+     \node[state] (q_1) [right= 3.5cm of q_0 ] {$[q_{100}], a, \epsilon$};
+     \node[state] (q_2) [right = 3.5cm of q_1 ] {$[q_{120}],\epsilon,\epsilon$};
+     \node[state] (q_8) [below= of q_1 ] {$[q_{111}], a, b$};
+     \node[state] (q_3) [below= of q_2 ] {$[q_{121}],\epsilon, b$};
+     \node[state] (q_4) [below=  of q_0] {$[q_{001}],\epsilon, b$};
+     \node[state] (q_5) [below = of q_4] {$[q_{201}],\epsilon, \epsilon$};
+     \node[state] (q_6) [right = 3.5cm of q_5 ] {$[q_{301}], a, \epsilon$};
+     \node[state,accepting] (q_7) [below = of q_3 ] {$[q_{321}],\epsilon, \epsilon$};
+\draw[]        
+     (q_0) edge[above] node{$\langle q_{000}, PR \ll a, q_{100} \rangle$} (q_1)
+	 (q_1) edge[above] node{$\langle q_{110}, PR \gg a, q_{120} \rangle$} (q_2)
+	 (q_1) edge[left] node{$\langle q_{110}, SP \ll b, q_{111} \rangle$} (q_8)
+	 (q_8) edge[above] node{$\langle q_{111}, PR \gg a, q_{121} \rangle$} (q_3)
+     (q_2) edge[left] node{$\langle q_{120}, SP \ll b, q_{121} \rangle$} (q_3) 
+     (q_3) edge[left] node{$\langle q_{121}, SP \gg b, q_{321} \rangle$} (q_7)
+     (q_0) edge[left] node{$\langle q_{000}, SP \ll b, q_{001} \rangle$} (q_4)
+     (q_4) edge[left] node{$\langle q_{001}, SP \gg b, q_{201} \rangle$} (q_5)
+     (q_5) edge[below] node{$\langle q_{201}, SP \gg b, q_{301} \rangle$} (q_6)
+     (q_6) edge[below] node{$\langle q_{311}, PR \ll a, q_{321} \rangle$} (q_7)
+      ;
+\end{tikzpicture}
+\end{center}
+\caption{Proyección de comunicación interna del AFCA  $\mathcal{A}$.}
+% \label{ex:pci}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Equivalencia Comunicacional}
+Para ver que la composición preserva la semántica comunicacional de un conjunto de AFCA  y sus respectivas mCFSMs queremos probar que $\widehat{\mathcal{A}}$ y $M$ son bisimilares. Para lo cual necesitamos que: 
+\begin{enumerate}
+    \item $\{\mathcal{A}\}_{1 \leq i \leq n}$ sea un conjunto de weak determinate AFCA sin transiciones de comunicación interna
+    \item su composición $\mathcal{A}$, también es weak determinate
+    \item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
+    \item $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs
+    \item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ el LTS que representa la semántica del CS
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Equivalencia Comunicacional}
+Dadas las condiciones establecidas necesitamos probar:
+\begin{enumerate}
+    \item \textbf{Equivalencia de estados discretos:} Para todo $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, existe $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$ tal que $q_i \in \overrightarrow{q} \iff q_i \in \overrightarrow{p}$ y viceversa.
+    \item \textbf{Equivalencia entre buffers y canales:} Dados $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$. Queremos ver que el conjunto de buffers $B$ de $\mathcal{A}$ es el conjunto de canales internalizados de $\mathcal{C}$ de $M$. Es decir que para todo canal $\omega$ vale que $\omega \in \mathcal{C}$ si y solo si $\omega \in B$
+\end{enumerate}
+    
+\end{frame}
 
 \end{document}
