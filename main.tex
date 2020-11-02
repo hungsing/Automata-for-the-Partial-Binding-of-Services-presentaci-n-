@@ -1,7 +1,7 @@
 %% Requires compilation with XeLaTeX or LuaLaTeX
 \documentclass[10pt,xcolor={table,dvipsnames},t]{beamer}
 
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
 \usepackage{amsfonts,amsmath,amsthm} % Math packages
@@ -379,7 +379,7 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 \begin{frame}{Composición parcial}
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[->, thick, scale=0.8, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [right= 1.5cm of q_0 ] {$q_1$};
  \node[state] (q_2) [below= of q_0 ] {$q_2$};
@@ -395,7 +395,7 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
         ; 
 \end{tikzpicture} 
 \ 
-\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
   \node[state] (q_2) [below= of q_1 ] {$q_2$};
@@ -408,7 +408,7 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
         ;
 \end{tikzpicture} 
 \ 
-\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
  \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
@@ -428,47 +428,47 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 
 \begin{frame}{Composición parcial ejemplo}
 \begin{figure}[H]
-% \begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
-%  \node[state,initial] (q_0)  {$q_{00}$}; 
-%  \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
-%  \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
-%  \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
-%  \node[state] (q_4) [below left= and 3 of q_0] {$q_{10}$};
-%   \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
-%   \node[state] (q_8) [below = and 3 of q_0 ] {$q_{20}$};
-%   \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
-%   \node[state] (q_7) [below = of q_9] {$q_{31}$};
-%   \node[state] (q_5) [below right = of q_7 ] {$q_{32}$};
-%   \node[state] (q_10) [below left= of q_7] {$q_{41}$};
-%  \node[state] (q_11) [below= 3cm of q_7] {$q_{42}$};
-%  \node[state] (q_13) [below= of q_6] {$q_{40}$};
+\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)  {$q_{00}$}; 
+ \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
+ \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
+ \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
+ \node[state] (q_4) [below left= and 3 of q_0] {$q_{10}$};
+  \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
+  \node[state] (q_8) [below = and 3 of q_0 ] {$q_{20}$};
+  \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
+  \node[state] (q_7) [below = of q_9] {$q_{31}$};
+  \node[state] (q_5) [below right = of q_7 ] {$q_{32}$};
+  \node[state] (q_10) [below left= of q_7] {$q_{41}$};
+ \node[state] (q_11) [below= 3cm of q_7] {$q_{42}$};
+ \node[state] (q_13) [below= of q_6] {$q_{40}$};
 %  \node[state] (q_14) [below right= of q_5] {$q_{33}$}
-%  \node[state,accepting] (q_12) [below= of q_11] {$q_{43}$};
-%  \draw[]        
-%         (q_0) edge[above] node{$int_r$} (q_1)
-%         (q_0) edge[right] node{$in(SP,b)$} (q_8)
-%         (q_0) edge[below] node{$PR \ll a$} (q_4)
-%         (q_1) edge[right] node{$PR \ll a$} (q_2)
-%  		(q_2) edge[right] node{$PR \gg a$} (q_3)
-%     	(q_2) edge[right] node{$in(SP,b)$} (q_7)
-%         (q_3) edge[right] node{$in(SP,b)$} (q_5) 
-%         (q_4) edge[left] node{$in(SP,b)$} (q_6)
-%         (q_6) edge[left] node{$int_r$} (q_7)
-%         (q_6) edge[left] node{$int_p$} (q_13)
-%         (q_7) edge[right] node{$PR \gg a$} (q_5)
-%         (q_7) edge[left] node{$int_p$} (q_10)
-%         (q_10) edge[left] node{$PR \gg a$} (q_11)
-%         (q_8) edge[right] node{$int_r$} (q_9)
-%         (q_8) edge[above] node{$PR \ll a$} (q_6)
-%         (q_9) edge[right] node{$PR \ll a$} (q_7)
-%         (q_5) edge[right] node{$int_p$} (q_11)
-%         (q_5) edge[right] node{$Out(RS,C)$} (q_14)
-%         (q_11) edge[right] node{$Out(RS,C$} (q_12)
-%         (q_13) edge[left] node{$int_r$} (q_10)
-%         (q_14) edge[right] node{$int_p$} (q_12)
-%         ;
-% \end{tikzpicture}
-%  \
+ \node[state,accepting] (q_12) [below= of q_11] {$q_{43}$};
+ \draw[]        
+        (q_0) edge[above] node{$int_r$} (q_1)
+        (q_0) edge[right] node{$in(SP,b)$} (q_8)
+        (q_0) edge[below] node{$PR \ll a$} (q_4)
+        (q_1) edge[right] node{$PR \ll a$} (q_2)
+ 		(q_2) edge[right] node{$PR \gg a$} (q_3)
+    	(q_2) edge[right] node{$in(SP,b)$} (q_7)
+        (q_3) edge[right] node{$in(SP,b)$} (q_5) 
+        (q_4) edge[left] node{$in(SP,b)$} (q_6)
+        (q_6) edge[left] node{$int_r$} (q_7)
+        (q_6) edge[left] node{$int_p$} (q_13)
+        (q_7) edge[right] node{$PR \gg a$} (q_5)
+        (q_7) edge[left] node{$int_p$} (q_10)
+        (q_10) edge[left] node{$PR \gg a$} (q_11)
+        (q_8) edge[right] node{$int_r$} (q_9)
+        (q_8) edge[above] node{$PR \ll a$} (q_6)
+        (q_9) edge[right] node{$PR \ll a$} (q_7)
+        (q_5) edge[right] node{$int_p$} (q_11)
+        %  (q_5) edge[right] node{$Out(RS,C)$} (q_14)
+        (q_11) edge[right] node{$Out(RS,C$} (q_12)
+        (q_13) edge[left] node{$int_r$} (q_10)
+        % (q_14) edge[right] node{$int_p$} (q_12)
+        ;
+\end{tikzpicture}
+ \
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
@@ -501,28 +501,15 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 
 \end{frame}
 
-\begin{frame}{Equivalencia comunicacional}
-Queremos garantizar que dado un conjunto de AFCA compatibles, y sus respectivas mCFSMs la composición total preserva la semántica comunicacional.  
-
-\begin{figure}[H]
-$$
-\xymatrix{   
-	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
-	  {||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[r]_{\ \ \ \ \Pi'} \ar[d]_{\Pi} & \mathcal{L}' & = & {\mathcal{L}}  \\
-	  \emptyset
-}
-$$
-% \caption{La composición de componentes asincrónicas preserva la semántica asincrónica de su interfaz de comunicación.}
-\end{figure}
-    
-\end{frame}
-
-\begin{frame}{Equivalencia comunicacional problema}
+\begin{frame}{Problema de las interfaces}
 
 El primer problema es que no siempre ocurre. Como en este caso.
 
+\begin{figure}[H]
 \begin{center}
-\begin{tabular}{c}
+\label{fig:ejemplo-weak-determinacy}
+\subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
+\label{fig:weak determinacy afca}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -546,7 +533,10 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{out(sp,b)} (q_2)
         ; 
 \end{tikzpicture}
-\vspace{0.5in}\\
+}
+
+\subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
+\label{fig:weak determinacy mCFSM}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
   \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
@@ -566,22 +556,34 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{sp!b} (q_2)
         ; 
 \end{tikzpicture}
-\end{tabular}
+}
 \end{center}
+\label{fig:weakdeterminacyviolation}
+\end{figure}
 \end{frame}
 
-\begin{frame}{Weak determinacy}
-Primero buscamos un criterio que garantice la preservación de la comunicación. Y con este criterio vemos un método de "extraer" la comunicación interna de un AFCA. Para un AFCA $A= \langle Q, \mathcal{C}, B, \Sigma, \delta, q_0, F \rangle$
+\begin{frame}{Problema de las interfaces: Weak determinacy}
+\begin{itemize}
+    \item La proyección de comunicación no refleja el comportamiento real de los autómatas que en el ejemplo quedan en deadlock.
+    \item No se puede tener una situación donde la decisión interna de un autómata afecte a los mensajes que este puede recibir.
+    \item Hay una hipótesis en cada punto en donde nosotros proyectamos la interfaz de comunicación del autómata exigiendo que sea weak determinate.
+    \item Weak determinacy garantiza que se pueden "ocultar" determinadas etiquetas sin afectar el comportamiento general del autómata. En nuestro caso las de cómputo con las de comunicación.
+\end{itemize}
+\end{frame}
 
-\begin{enumerate}
-    \item Weak Determinacy: Sea $\Sigma' \subseteq \Sigma$ un conjunto de etiquetas a silenciar. Se dice que $A$ es \emph{weak determinate sobre $\Sigma'$} si para todo $q, q', q'' \in Q$ y para todo $s, s' \in \Sigma^*$ tal que $\widehat{s}_{\Sigma'} = \widehat{s'}_{\Sigma'}$, $q \xrightarrow{s} q'$ y $q \xrightarrow{s'} q''$, $q' \sim_{\Sigma'} q''$.
-
-    \item Decimos que si $A$ es weak determinate, entonces dados dos estados $q, q' \in Q$ tales que $q \xrightarrow{\sigma} q'$ con $\sigma \in \Sigma_{\mathit{Int}}^*$,  $q \sim_{\Sigma_\mathit{Int}} q'$.
+\begin{frame}{Equivalencia comunicacional}
+Si chequeamos compliance entre un conjunto de interfaces, queremos que la composición de los AFCA originales al internalizar la comunicación, los elementos comunicacionales que ahora son parte del autómata compuesto preserva las propiedades del CS que usé para chequear compliance.
+\begin{figure}[H]
+$$
+\xymatrix{   
+	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+	  {||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[r]_{\ \ \ \ \Pi'} \ar[d]_{\Pi} & \mathcal{L}' & = & {\mathcal{L}}  \\
+	  \emptyset
+}
+$$
+% \caption{La composición de componentes asincrónicas preserva la semántica asincrónica de su interfaz de comunicación.}
+\end{figure}
     
-    \item Si $A$ weak determinate, definimos equivalencia de estados por comunicación interna como $q \Rightarrow q'$ si y solo si existe $\sigma \in \Sigma_\mathit{Int}$ tal que $q \xrightarrow{\sigma} q'$. Luego, $[q]_m$, \emph{la clase de equivalencia por comunicación interna} de $q$, se define como $[q]_m = \{q'\ |\ q \Rightarrow^\bullet q'\}$. 
-    
-    \item Decimos que dos clases de equivalencia están relacionadas $[q]_m \xrightarrow{\sigma} [q']_m$ sii $\exists q_i \in [q]_m, q'_i \in [q']_m$ tales que $q_i \xrightarrow{\sigma} q'_i \in \delta_{\text{Buff}}$
-\end{enumerate}
 \end{frame}
 
 \begin{frame}{Proyección de comunicación interna ejemplo}
