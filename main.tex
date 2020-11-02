@@ -1,11 +1,7 @@
 %% Requires compilation with XeLaTeX or LuaLaTeX
 \documentclass[10pt,xcolor={table,dvipsnames},t]{beamer}
 
-<<<<<<< HEAD
 \usepackage[utf8]{inputenc}
-=======
-% \usepackage[utf8]{inputenc}
->>>>>>> 2951bfbbce4f361aed77d9582f4d612910aa79bd
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
 \usepackage{amsfonts,amsmath,amsthm} % Math packages
@@ -578,7 +574,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
 Primero buscamos un criterio que garantice la preservación de la comunicación. Y con este criterio vemos un método de "extraer" la comunicación interna de un AFCA. Para un AFCA $A= \langle Q, \mathcal{C}, B, \Sigma, \delta, q_0, F \rangle$
 
 \begin{enumerate}
-    \item Weak Determinacy: Sea $\Sigma' \subseteq \Sigma$ un conjunto de etiquetas a silenciar. Se dice que $A$ es \emph{weak determinate sobre $\Sigma'$} si para todo $q, q', q'' \in Q$ y para todo $s, s' \in \Sigma^*$ tal que $\widehat{s}_{\Sigma'} = \widehat{s'}_{\Sigma'}$, $q \xrightarrow{s} q'$ y $q \xrightarrow{s'} q''$, $q' \sim_{\Sigma'} q''$.\\
+    \item Weak Determinacy: Sea $\Sigma' \subseteq \Sigma$ un conjunto de etiquetas a silenciar. Se dice que $A$ es \emph{weak determinate sobre $\Sigma'$} si para todo $q, q', q'' \in Q$ y para todo $s, s' \in \Sigma^*$ tal que $\widehat{s}_{\Sigma'} = \widehat{s'}_{\Sigma'}$, $q \xrightarrow{s} q'$ y $q \xrightarrow{s'} q''$, $q' \sim_{\Sigma'} q''$.
 
     \item Decimos que si $A$ es weak determinate, entonces dados dos estados $q, q' \in Q$ tales que $q \xrightarrow{\sigma} q'$ con $\sigma \in \Sigma_{\mathit{Int}}^*$,  $q \sim_{\Sigma_\mathit{Int}} q'$.
     
