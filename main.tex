@@ -1,23 +1,34 @@
 %% Requires compilation with XeLaTeX or LuaLaTeX
 \documentclass[10pt,xcolor={table,dvipsnames},t]{beamer}
 
+<<<<<<< HEAD
 \usepackage[utf8]{inputenc}
+=======
+% \usepackage[utf8]{inputenc}
+>>>>>>> 2951bfbbce4f361aed77d9582f4d612910aa79bd
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
 \usepackage{amsfonts,amsmath,amsthm} % Math packages
 \usepackage{mathabx}
 \usepackage{mathtools}
 \usepackage{tikz}
+\usepackage{paralist}
 \usepackage{xypic}
 \usepackage{graphicx}
+\graphicspath{ {./images/} }
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage{float}
-% \usepackage[shortlabels]{enumitem}
 \usetikzlibrary{babel,automata,positioning,arrows}
 \newcommand{\Tau}{\mathrm{T}}
 \newtheorem{ejemplo}{Ejemplo}
+\definecolor{com}{RGB}{236, 93, 87}
+\definecolor{proc}{RGB}{125, 197, 82}
+\definecolor{muller}{RGB}{81, 167, 249}
+\definecolor{map}{RGB}{179, 106, 226}
+\definecolor{prov}{RGB}{243, 144, 25}
+\definecolor{req}{RGB}{220, 189, 35}
+
 \title{Auómatas para la vinculación parcial de servicios}
-% \subtitle{Your subtitle (if there's one)}
 \author{Ezequiel Davidovich Caballero}
 \institute{Departamento de Computación, Facultad de Ciencias Exactas y Naturales}
 \date{11 de Noviembre 2020}
@@ -56,10 +67,30 @@ Buenos Aires, 2020
 %\end{frame}
 
 \section{Introduction}
+\begin{frame}{Intro (Motivación)}
+\begin{center}
+    “Computing is becoming a utility and software a service. […] applications will no longer bea big chunk of software that runs on a computer but a combination of web services; and the platform for which developers write their programs will no longer be the operating system, but application servers.”
+\end{center}
+The Economist, May 2003
+\begin{center}
+“La computación se está volviendo una utilidad y el software un servicio. […] las aplicaciones van a dejar de ser un gran bloque de software que corre en una computadora para ser una combinación de servicios web; y la plataforma para la que los desarrolladores escriben sus programas dejará de ser un sistema operativo para ser servidores de aplicaciones.”    
+\end{center}
+The Economist, Mayo 2003
+\end{frame}
+
+\begin{frame}{API Economy}
+ \textbf{Tools and Methods for Software Development section of H2020 work
+ programme 14/15
+ %\footnote{HORIZON 2020 – WORK PROGRAMME 2014 2015 LEIT – ICT. https://ec.europa.eu/research/participants/data/ref/h2020/wp/2014_2015/main/h2020-wp1415-leit-ict_en.pdf.pp. 23.}
+ :} 
+ The quality levels required for complex and critical systems for example in terms of reliability, resilience and automatic adaptation, still represent a major challenge given current software development methods and tools. Breakthroughs in this area could significantly improve the growth and competitiveness of the European industry and encourage faster innovation cycles.
+\textbf{Cloud Computing section of H2020 work programme 16/17 
+%\footnote{HORIZON 2020 – WORK PROGRAMME 20162017 LEIT – ICT. https://ec.europa.eu/research/participants/data/ref/h2020/wp/2016_2017/main/h2020-wp1617-leit-ict_en.pdf. pp. 19.} 
+:} Recent trends in cloud computing go towards the development of new paradigms (heterogeneous, federated, distributed clouds) as opposed to the current centralised model, with tight interactions between the computing and networking infrastructures.
+\end{frame}
 
 \begin{frame}{Service-oriented Computing}
-
-Service-oriented computing (SOC) es el paradigma de cómputo que utiliza servicios como elementos fundamentales para el desarrollo de aplicaciones. Para construir este modelo de servicios, SOC se basa en un modo de reorganizar el aplicaciones de software e infraestructura en un conjunto de servicios que interactúan entre sí.
+% Service-oriented computing (SOC) es el paradigma de cómputo que utiliza servicios como elementos fundamentales para el desarrollo de aplicaciones. Para construir este modelo de servicios, SOC se basa en un modo de reorganizar el aplicaciones de software e infraestructura en un conjunto de servicios que interactúan entre sí.
 
 En Service-oriented computing los sistemas de software tienen tres características distintivas:
 \begin{itemize}
@@ -76,59 +107,105 @@ En Service-oriented computing los sistemas de software tienen tres característi
 \section{ARN}
 
 \begin{frame}{Asynchronous Relational Nets}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN0.png}
+\end{center}
+\end{frame}
 
-Un enfoque para representar este tipo de sistemas son las Asynchronous Relational Nets (ARNs) definidas por Fiadeiro y López. un álgebra de componentes e interfaces, independiente de otros modelos de análisis, que caracteriza la estructura del diseño SOC.\\
-Consisten de redes de procesos que interactúan a través de canales de comunicación en forma asincrónica.\\
-Una interfaz de servicios ofrece propiedades a potenciales clientes y requiere propiedades de servicios externos que requieran ser descubiertos y vinculados, en tiempo de ejecución, a la orquestación del servicio.
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN1.png}
+\end{center}
+Una ARN es una estructura bipartita basada en hipergrafos cuyos nodos son considerados \textbf{puertos}, y tiene dos tipos de hiper arcos, que se interpretan como \textcolor{com}{canales de comunicación} y \textcolor{proc}{pocesos}, respectivamente.
+\end{frame}
 
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN2.png}
+\end{center}
+Cada hiper arco es etiquetado con un \textcolor{muller}{autómata de Muller}. En el caso de los \textcolor{proc}{procesos} sobre el alfabeto de los \textbf{puertos} adyacentes y en el caso de los \textcolor{com}{canales de comunicación}, sobre un nuevo alfabeto al que los hiper ejes de los puertos se \textcolor{map}{mapean inyectivamente}  
+\end{frame}
+
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN3.png}
+\end{center}
+Los nodos que son únicamente adyacentes a \textcolor{proc}{procesos} se denominan \textcolor{prov}{provides points}  
+\end{frame}
+
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN4.png}
+\end{center}
+Los nodos que son únicamente adyacentes a \textcolor{proc}{procesos} se denominan \textcolor{prov}{provides points}, mientras que aquellos adyacentes a \textcolor{com}{canales de comunicación} se denominan \textcolor{req}{requires points}  
+\end{frame}
+
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN5.png}
+\end{center}
+Si una ARN tiene \textcolor{prov}{provides points}, se dice que es un \textbf{servicio} porque puede ser vinculado a través de los mismos.
+\end{frame}
+
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\includegraphics[scale=0.45]{images/ARN6.png}
 \end{frame}
 
 
-\begin{frame}{Asynchronous Relational Nets características}
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.39]{images/ARN7.png}
+\end{center}
+La composición de una \textbf{actividad} con un \textbf{servicio} se realiza a través de un \textcolor{map}{mapeo inyectivo} del lenguaje de un \textcolor{req}{requires points} de una \textbf{actividad} al lenguaje de un \textcolor{prov}{provides points} de un \textbf{servicio}
+\end{frame}
 
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+\begin{center}
+\includegraphics[scale=0.39]{images/ARN8.png}
+\end{center}
+La composición de una \textbf{actividad} con un \textbf{servicio} se realiza a través de un \textcolor{map}{mapeo inyectivo} del lenguaje de un \textcolor{req}{requires points} de una \textbf{actividad} al lenguaje de un \textcolor{prov}{provides points} de un \textbf{servicio}
+\end{frame}
+
+
+\begin{frame}{Asynchronous Relational Networks}
+   \includegraphics[scale=0.45]{images/ARN9.png}
+Problema: los autómatas de Muller no son compatibles con la noción de comunicación
+\end{frame}
+
+\begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
+\begin{center}
+    % \includegraphics[scale=0.5]{images/ARN0.png}
+\end{center}
+Respuesta: Cambiar el lenguaje de los hiper arcos.
+\end{frame}
+
+
+\begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
 \begin{itemize}
-    \item Modelo basado en orquestación: requieren un servicio que coordine el funcionamiento del sistema compuesto por,
+    \item Se integraron \textbf{coreografías} (global graphs \cite{denielou:esop12}), que declaran el protocolo a seguir de los servicios a ser vinculados, desde el punto de vista de la actividad con \textbf{orquestación} (communicating finite state machines, CFSM, \cite{brand:jacm-30_2}) que declaran los mensajes que un participante está dispuesto a enviar y/o recibir desde el punto de vista del servicio.
 
-    \item Un hipergrafo $\langle X,E \rangle$ donde $X$ es el conjunto finito de nodos (denominados puertos) y $E$ el conjunto de hiper ejes que se dividen por su función en hiper ejes de cómputo y de comunicación
-    
-    \item Tres funciones de etiquetado que asignan:
-        \begin{itemize}
-            \item[o] Un puerto $M_x$ a cada nodo de $X$
-            \item[o] Un proceso a cada hiper eje de cómputo 
-            \item[o] Una conexión a cada hiper eje de comunicación
-        \end{itemize}
+    \item Se definieron dos algoritmos para decidir la interoperabilidad en tiempo de ejecución utilizando los resultados introducidos por Lange et al. \cite{lange:popl15}
 \end{itemize}
-
-\end{frame}
-
-\begin{frame}{ARNs:Semántica Operacional}
-    Un aporte al modelo es el agregado de una semántica operacional que permitiera modelar la capacidad de composición parcial. Para esto los hiper ejes (tanto de comunicación como de cómputo) pasan a ser modelados con autómatas de Muller.
-    \begin{itemize}
-        \item[\textbf{Pro:}] Esta modificación trae a las ARNs el concepto de reconfiguración y ejecución dinámica, y permite la posibilidad de hacer chequeo de compliance (que la visión global sea igual que la local) entre un conjunto de participantes.
-        
-        \item[\textbf{Contra:}]Los autómatas de Muller sirven para modelar cómputo pero no son compatibles con la noción de comunicación.
-    \end{itemize}
 \end{frame}
 
 \begin{frame}{Communicating Relational Networks}
-   La modificación de las ARNs seguía sin satisfacer del todo los ideales de SOC. Para resolver esto surgen las Communicating Relational Networks (CRNs) como variante de las ARNs con las siguientes modificaciones
-    \begin{itemize}
-        \item Los hiper ejes pasan a modelarse con global graphs.
-        \item Los puertos ahora son communicating finite state machines (CFSMs).
-        \item Cambia a un modelo basado en la idea de coreografía. Es decir la comunicación se organiza en base a interacciones entre los componentes sin necesidad de un servicio que controle.
-    \end{itemize}
+\begin{itemize}
+    \item \textbf{Provides point}(los puntos conectados sólo a hiper arcos de proceso): se etiquetan con una \textbf{CFSM} que declara su único rol en la comunicación
+    \item \textbf{Hiper arcos de comunicación}: se etiquetan con un \textbf{global graph} que declara qué protocolo deben seguir los servicios que participan en la comunicación
+    \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal.
+\end{itemize}
 \end{frame}
 
-\begin{frame}{CRNs: Características}
-Esta modificación trae una serie de ventasjas:
-\begin{enumerate}
-    \item Chequeo de compliance más sencillo: o bien probando que la proyección del global graph es bisimilar a la de la CFSM correspondiente o bien probando que las CFSMs cumplen con la condición de General Multiparty Compatibility (GMC)
-    \item El enfoque de coreografía se acerca a proveer una visión donde los distintos servicios se coordinan entre sí sin necesidad de un servicio que se ocupe específicamente de esa tarea.
-\end{enumerate}
+\begin{frame}{Communicating Relational Networks}
+\begin{itemize}
+    \item \textbf{Coreografía (visión local) \cite{brand:jacm-30_2}:} las CFSMs  son autómatas finitos cuyos ejes se etiquetan con:  \begin{inparaenum}[a.]\item $P!m$ indicando que se le envía el mensaje $m$ al participante $P$ o \item $P?m$ indicando que el participante $P$ recibe el mensaje $m$
+     \end{inparaenum}
+    \item \textbf{Coreografía (visión global) \cite{denielou:esop12}}: los global graphs son autómatas finitos cuyos ejes se etiquetan con $P \rightarrow Q:m$ indicando que el participante $P$ envía el mensaje $m$ a $Q$.
+\end{itemize}
 \end{frame}
+
 
 \begin{frame}{Communicating Finite State Machines}
-Son un tipo de autómatas de comunicación asincrónica donde los participantes intercambian mensajes a través de canales FIFO. Se definen sobre un conjunto de mensajes $\mathcal{M}$ como una estructura $\langle Q, \mathcal{C}, q_0, \mathcal{M}, \delta \rangle$. Donde $Q$ es el conjunto de estados, $\mathcal{C}$ el conjunto de canales de comunicación (uno en cada sentido por cada par de participantes), $q_0 \in Q$ el estado inicial y $\delta \subseteq Q \times \{!,?\} \times \mathcal{M} \times Q$ la relación de transición.
 
 \begin{center}
 \begin{tabular}{ccc}
@@ -171,81 +248,139 @@ Son un tipo de autómatas de comunicación asincrónica donde los participantes 
 \end{center}
 \end{frame}
 
-\begin{frame}{Global Graphs y GMC}
-Un Global Graph es un grafo etiquetado $\langle V, A, \Lambda \rangle$ definido sobre un conjunto de participantes $\mathcal{P}$ y un conjunto de mensajes $\mathcal{M}$. El mismo se compone de un conjunto de vértices $V$, un conjunto de ejes $A \subseteq V \times V$ y una función de etiquetado $\Lambda: A \rightarrow L$. 
-
-Dado un conjunto de participantes $\mathcal{P}$ y sus respectivas CFSMs $M_p$ llamamos Communicating System (CS) a la tupla $S=(M_p)_{p \in \mathcal{P}}$ y un par $s=\langle \overrightarrow{q} ; \overrightarrow{\omega} \rangle$ a una configuración de $S$. General Multiparty Compatibility (GMC) es una condición sólida y completa para construir global graphs a partir de un CS. La condición de GMC garantiza que si el CS es seguro, es decir que carece de configuraciones de: 
-\begin{itemize}
-    \item Deadlock
-    \item Recepción no especificada
-    \item Mensajes huérfanos
-\end{itemize}
-    
+\begin{frame}{Orquestación a coreografías ventajas}
+ \begin{itemize}
+     \item El modelo pasa a ser completamente asincrónico. No hay un servicio que coordine la comunicación sino que se coordina entre los participantes.
+    \item El chequeo de interoperabilidad se hace en el momento de la vinculación.
+    \item Confirmar la interoperabilidad entre componentes se reduce a probar la propiedad de General Multiparty Compatibilty (GMC) que garantiza la ausencia de tres errores: \begin{itemize}
+        \item \textbf{Deadlock:}todos los canales están vacíos y todas las máquinas terminaron su ejecución salvo una máquina que esperando un mensaje
+        \item \textbf{Recepción no especificada:} si una máquina tiene que recibir un mensaje pero el mensaje que está en el canal no es el mensaje que está esperando y no puede seguir ejecutando
+        \item \textbf{Mensaje huérfano:} todas las máquinas terminaron su ejecución pero quedó un mensaje en un canal
+    \end{itemize}
+ \end{itemize}
 \end{frame}
 
-\begin{frame}{Problemas a Resolver}
-\begin{enumerate}
-    \item Si bien los métodos de vinculación y chequeo de compliance son más sencillos tienen una desventaja respecto a la versión anterior de la ARNs. \\
-    \item Para poder hacer el chequeo de compliance es necesario que estén presentes todos los participantes de la comunicación. Es decir, se pierde la idea de vinculación dinámica porque sí o sí todos los servicios que van a ser requeridos tienen que ser conocidos.\\
-    \item Para solucionar estos problemas buscamos un formalismo con mecanismo de composición que permita proyectarse a CFSMs y recuperar la noción de composición parcial.
+\begin{frame}{Orquestación a coreografías desventajas}
+ \begin{itemize}
+    \item Se pierde la noción de binding parcial. El chequeo de interoperabilidad requiere la presencia de todos los participantes de un canal
+    \item El leguaje de cómputo ahora es distino del lenguaje de comunicación
+     \end{itemize}
+\end{frame}
+% \begin{frame}{Global Graphs y GMC}
+% Dado un conjunto de participantes $\mathcal{P}$ y sus respectivas CFSMs $M_p$ llamamos Communicating System (CS) a la tupla $S=(M_p)_{p \in \mathcal{P}}$ y un par $s=\langle \overrightarrow{q} ; \overrightarrow{\omega} \rangle$ a una configuración de $S$. General Multiparty Compatibility (GMC) es una condición sólida y completa para construir global graphs a partir de un CS. La condición de GMC garantiza que si el CS es seguro, es decir que carece de configuraciones de: 
+% \begin{itemize}
+%     \item Deadlock
+%     \item Recepción no especificada
+%     \item Mensajes huérfanos
+% \end{itemize}
+    
+% \end{frame}
 
-\end{enumerate}
+\begin{frame}{Lo que buscamos}
+\begin{center}
+    \includegraphics[scale=0.5]{images/ARN0.png}
+\end{center}
+Buscamos un formalismo que pueda modelar comunicación y cómputo, que permita asociar una semántica a la actividad completa a través de la composición de los autómatas involucrados y poder recuperar la noción de composición parcial para evitar el chequeo de interoperabilidad con todos los particiapntes.
+
 \end{frame}
 
 \begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
-
-Los Autómatas Finitos de Comunicación Asincrónica (AFCA) son una clase de autómatas de comunicación de la forma $A_\mathcal{P} = \langle Q, B, \mathcal{C}, \Sigma, \delta, q_0, F\rangle$ que poseen:
 \begin{itemize}
-    \item Comunicación externa a través de los canales en $\mathcal{C}$
-    \item Transiciones internas o de cómputo,
-    \item Comunicación interna a través de buffers
-    \item Un mecanismo de composición que admite composición parcial transformando la comunicación externa compartida entre participantes en comunicación interna del autómata resultante
-\end{itemize} 
-
-La interfaz de comunicación externa de un AFCA se puede proyectar en una communicating machine. Para lo cual definimos las Multichannel Communicating Finite State Machines (mCFSM). CFSMs con más de un par de canales entre cada par de participantes
+    \item Los Autómatas Finitos de Comunicación Asincrónica (AFCA) son una clase de autómatas de comunicación que poseen:
+    \begin{itemize}
+        \item Transiciones internas o de cómputo,
+        \item Comunicación externa a través de los canales en $\mathcal{C}$
+        \item Comunicación interna a través de buffers
+    \end{itemize} 
+    \item Permiten composición total y composición parcial internalizando la comunicación externa compartida entre participantes
+    \item La interfaz de comunicación externa de un AFCA se puede proyectar en una communicating machine.(bajo ciertas condiciones que luego exploraremos)
+\end{itemize}
 \end{frame}
 
-\begin{frame}{AFCA ejemplo}
-Ejemplo de un Autómata Finito de Comunicación Asincrónica
-Considere el AFCA $S= \langle \{q_0,..,q_5\},\{b_0\},\{sr_1,sr_2,rs_1\}, \Sigma_A, \delta_A, q_0, \{q_4\} \rangle$. Donde $\Sigma =\{wait, b_0 \ll m_1,b_0 \gg m_1, Out(sr_1,a),Out(sr_2,c), In(rs_1,b),In(rs_2,d) \}$
+\begin{frame}{AFCA}
+\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[->, thick]
+\begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [right= 1.5cm of q_0 ] {$q_1$};
- \node[state] (q_5) [right= 1.8cm of q_1 ] {$q_5$};
  \node[state] (q_2) [below= of q_0 ] {$q_2$};
  \node[state] (q_3) [right= 1.5cm of q_2 ] {$q_3$};
- \node[state,accepting] (q_4) [right= 1.8cm of q_3 ] {$q_4$};
+ \node[state, accepting] (q_4) [below= of q_3 ] {$q_4$};
+	
  \draw[]        
-        (q_0) edge[above] node{$b_0 \ll m_1$} (q_1)
-        (q_0) edge[left] node{$Out(sr_1,a)$} (q_2)
-        (q_1) edge[above] node{$Out(sr_2,c)$} (q_5)
-        (q_2) edge[above] node{$In(rs_1,b)$} (q_3)
-        (q_2) edge[bend right, below] node{$wait$} (q_4)
-        (q_3) edge[above] node{$In(rs_2,d)$} (q_4)
-        (q_5) edge[right] node{$b_0 \gg m_1$} (q_4)
+        (q_0) edge[above] node{out(PR,a)} (q_1)
+        (q_0) edge[left] node{in(SP,b)} (q_2)
+        (q_1) edge[right] node{in(SP,b)} (q_3)
+        (q_2) edge[above] node{out(PR,a)} (q_3)
+        (q_3) edge[right] node{$int_p$} (q_4)
+        ; 
+\end{tikzpicture} 
+\ 
+\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
+ \draw[]        
+        
+        (q_0) edge[right] node{$int_r$} (q_1)
+        (q_1) edge[right] node{in(pr,a)} (q_2)
         ;
-\end{tikzpicture}
+\end{tikzpicture} 
+\ 
+\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$q_0$}; 
+ \node[state, accepting] (q_1) [below= of q_0 ] {$q_1$};
+
+ \draw[]        
+        
+        (q_0) edge[right] node{out(sp,b)} (q_1)
+        
+        ;
+\end{tikzpicture} 
 \end{center}
-En el ejemplo podemos ver los tres tipos de transiciones que los AFCA pueden realizar. 
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$[q_0]$}; 
+ \node[state] (q_1) [right= of q_0 ] {$[q_1]$};
+  \node[state] (q_2) [below= of q_0 ] {$[q_2$]};
+ \node[state] (q_3) [right= of q_2 ] {$[q_3]$};
+
+ \draw[]        
+        (q_0) edge[above] node{pr!a} (q_1)
+        (q_0) edge[right] node{sp?b} (q_2)
+        (q_1) edge[right] node{sp?b} (q_3)
+        (q_2) edge[above] node{pr!a} (q_3)
+        ; 
+\end{tikzpicture} 
+\
+\begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$[q_0]$}; 
+ \node[state] (q_1) [below= of q_0 ] {$[q_2]$};
+
+ \draw[]        
+        (q_0) edge[right] node{pr?a} (q_1)
+        ;
+\end{tikzpicture} 
+\ 
+\begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
+ \node[state,initial] (q_0)   {$[q_0]$}; 
+ \node[state] (q_1) [below= of q_0 ] {$[q_1]$};
+ 
+ \draw[]        
+        (q_0) edge[right] node{sp!b} (q_1)
+        ;
+\end{tikzpicture} 
+\end{center}
+% \caption{mCFSM $M_P$, $M_R$ y $M_S$, correspondientes a los AFCAs de la Subfig.~\ref{a_i}.}
+% \label{m_i}
+\end{figure}
+Los AFCA P,R y S, y sus interfaces de comunicación.
 \end{frame}
 
 \begin{frame}{Composición parcial}
-Para modelar la reconfiguración dinámica en tiempo de ejecución los AFCA incorporan un mecanismo de composición que admite composición parcial:
-\begin{itemize}
-    \item Decimos que un conjunto de AFCA son compatibles para componer si vale $\Sigma_{p_i} \cap \Sigma_{p_j}= \emptyset$ y $B_{p_i} \cap B_{p_j} = \emptyset$ para todo $p_i, p_j \in \mathcal{P}$
-    \item $Q_\mathcal{P}= \Pi_{p_i \in \mathcal{P}} Q_{p_i}$ El conjunto de estados resultantes es el producto de los conjuntos de los componentes
-    \item $B_\mathcal{P} = \bigcup_{p_i \in \mathcal{P}} B_{p_i} \cup \{ \omega_c \ | \ \mbox{ existen } p_i, p_j \in \mathcal{P} \mbox{ tales que } c \in \mathcal{C}_{p_i} \cap \mathcal{C}_{p_j} \}$ El conjunto de buffers internos es la unión de los de los componenetes más uno nuevo por cada canal de comunicación externa compartido entre cada par de AFCA
-    \item $\Sigma_\mathcal{P} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i}$ con $\Sigma_{\mathcal{P}\mathit{Ex}} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i\mathit{Ex}} \setminus \Sigma_{p_i \mapsto p_j}$ y $\Sigma_{\mathcal{P}\mathit{Buff}} = \bigcup_{p_i \in \mathcal{P}} \Sigma_{p_i\mathit{Buff}} \cup \Sigma_{p_i \mapsto p_j}$,
-    \item $\delta_\mathcal{P}$ 
-    
-\end{itemize}
-    
-\end{frame}
-
-\begin{frame}{Composición parcial ejemplo}
-Tomemos estos tres AFCA como ejemplo, podemos ver que cumplen la condición necesaria de compatibilidad.
-
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.8, every node/.style={transform shape}]
@@ -267,73 +402,87 @@ Tomemos estos tres AFCA como ejemplo, podemos ver que cumplen la condición nece
 \begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
- \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
+  \node[state] (q_2) [below= of q_1 ] {$q_2$};
+  \node[state, accepting] (q_3) [below= of q_2 ] {$q_3$};
  \draw[]        
         
         (q_0) edge[right] node{$int_r$} (q_1)
         (q_1) edge[right] node{in(pr,a)} (q_2)
+        (q_2) edge[right] node{out(rs,c)} (q_3)
         ;
 \end{tikzpicture} 
 \ 
-\begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
- \node[state, accepting] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
 
  \draw[]        
         
         (q_0) edge[right] node{out(sp,b)} (q_1)
+        (q_1) edge[right] node{in(rs,c)} (q_2)
         
         ;
 \end{tikzpicture} 
 \end{center}
-% \caption{Autómatas finitos de comunicación asincrónica $A_P$, $A_R$, $A_S$.}
-\label{a_i}
 \end{figure}
+    
 \end{frame}
+
 
 \begin{frame}{Composición parcial ejemplo}
 \begin{figure}[H]
-\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
- \node[state,initial] (q_0)  {$q_{00}$}; 
- \node[state] (q_1) [below right=  and 3 of q_0] {$q_{01}$};
- \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
- \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
- \node[state] (q_4) [below= of q_0] {$q_{10}$};
-  \node[state] (q_5) [below left = of q_3 ] {$q_{32}$};
-  \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
-  \node[state] (q_7) [below = 1.5 of q_6 ] {$q_{31}$};
-  \node[state] (q_8) [below left = and 3 of q_0 ] {$q_{20}$};
-  \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
-  \node[state] (q_10) [below left= of q_7] {$q_{41}$};
- \node[state,accepting] (q_11) [below= 3cm of q_7] {$q_{42}$};
- \draw[]        
-        (q_0) edge[above] node{$int_r$} (q_1)
-        (q_0) edge[above] node{$in(SP,b)$} (q_8)
-        (q_0) edge[right] node{$PR \ll a$} (q_4)
-        (q_1) edge[right] node{$PR \ll a$} (q_2)
- 		(q_2) edge[right] node{$PR \gg a$} (q_3)
-		(q_2) edge[right] node{$in(SP,b)$} (q_7)
-        (q_3) edge[right] node{$in(SP,b)$} (q_5) 
-        (q_4) edge[right] node{$in(SP,b)$} (q_6)
-        (q_6) edge[left] node{$int_r$} (q_7)
-        (q_7) edge[right] node{$PR \gg a$} (q_5)
-        (q_7) edge[left] node{$int_p$} (q_10)
-        (q_10) edge[left] node{$PR \gg a$} (q_11)
-        (q_8) edge[left] node{$int_r$} (q_9)
-        (q_8) edge[left] node{$PR \ll a$} (q_6)
-        (q_9) edge[left] node{$PR \ll a$} (q_7)
-        (q_5) edge[right] node{$int_p$} (q_11)
-        ;
-\end{tikzpicture}
- \
+% \begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
+%  \node[state,initial] (q_0)  {$q_{00}$}; 
+%  \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
+%  \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
+%  \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
+%  \node[state] (q_4) [below left= and 3 of q_0] {$q_{10}$};
+%   \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
+%   \node[state] (q_8) [below = and 3 of q_0 ] {$q_{20}$};
+%   \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
+%   \node[state] (q_7) [below = of q_9] {$q_{31}$};
+%   \node[state] (q_5) [below right = of q_7 ] {$q_{32}$};
+%   \node[state] (q_10) [below left= of q_7] {$q_{41}$};
+%  \node[state] (q_11) [below= 3cm of q_7] {$q_{42}$};
+%  \node[state] (q_13) [below= of q_6] {$q_{40}$};
+%  \node[state] (q_14) [below right= of q_5] {$q_{33}$}
+%  \node[state,accepting] (q_12) [below= of q_11] {$q_{43}$};
+%  \draw[]        
+%         (q_0) edge[above] node{$int_r$} (q_1)
+%         (q_0) edge[right] node{$in(SP,b)$} (q_8)
+%         (q_0) edge[below] node{$PR \ll a$} (q_4)
+%         (q_1) edge[right] node{$PR \ll a$} (q_2)
+%  		(q_2) edge[right] node{$PR \gg a$} (q_3)
+%     	(q_2) edge[right] node{$in(SP,b)$} (q_7)
+%         (q_3) edge[right] node{$in(SP,b)$} (q_5) 
+%         (q_4) edge[left] node{$in(SP,b)$} (q_6)
+%         (q_6) edge[left] node{$int_r$} (q_7)
+%         (q_6) edge[left] node{$int_p$} (q_13)
+%         (q_7) edge[right] node{$PR \gg a$} (q_5)
+%         (q_7) edge[left] node{$int_p$} (q_10)
+%         (q_10) edge[left] node{$PR \gg a$} (q_11)
+%         (q_8) edge[right] node{$int_r$} (q_9)
+%         (q_8) edge[above] node{$PR \ll a$} (q_6)
+%         (q_9) edge[right] node{$PR \ll a$} (q_7)
+%         (q_5) edge[right] node{$int_p$} (q_11)
+%         (q_5) edge[right] node{$Out(RS,C)$} (q_14)
+%         (q_11) edge[right] node{$Out(RS,C$} (q_12)
+%         (q_13) edge[left] node{$int_r$} (q_10)
+%         (q_14) edge[right] node{$int_p$} (q_12)
+%         ;
+% \end{tikzpicture}
+%  \
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state, accepting] (q_2) [below= of q_1 ] {$q_2$};
 
  \draw[]        
         
         (q_0) edge[right] node{out(sp,b)} (q_1)
-    
+        (q_1) edge[right] node{in(rs,c)} (q_2)
+        
         ;
 \end{tikzpicture}
 
@@ -363,7 +512,7 @@ Queremos garantizar que dado un conjunto de AFCA compatibles, y sus respectivas 
 $$
 \xymatrix{   
 	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
-	  {A} \ar[r]_{\Pi'} \ar[d]_{\Pi} & \mathcal{L}' & = & {\mathcal{L}}  \\
+	  {||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[r]_{\ \ \ \ \Pi'} \ar[d]_{\Pi} & \mathcal{L}' & = & {\mathcal{L}}  \\
 	  \emptyset
 }
 $$
@@ -437,16 +586,6 @@ Primero buscamos un criterio que garantice la preservación de la comunicación.
     
     \item Decimos que dos clases de equivalencia están relacionadas $[q]_m \xrightarrow{\sigma} [q']_m$ sii $\exists q_i \in [q]_m, q'_i \in [q']_m$ tales que $q_i \xrightarrow{\sigma} q'_i \in \delta_{\text{Buff}}$
 \end{enumerate}
-\end{frame}
-
-\begin{frame}{Proyección de comunicación interna}
-Tomando el AFCA $A$, weak determinate sin transiciones de comunicación externa, definimos la Proyección de Comunicación Interna $\Tau(A)$ como la proyección de la semántica de comunicación de $\mathcal{A}$. Llamamos $\widehat{\mathcal{A}}$ al sistema de transición etiquetado resultante y decimos que $\Tau (\langle Q, B, \mathcal{C}, \Sigma, q_0, \delta, F \rangle)= \langle \widehat{Q}, B, \widehat{q_0}, \widehat{\Delta} \rangle$ tal que:
-\begin{itemize}
-    \item $ \widehat{Q} = \{ \langle [q]_m, \overrightarrow{\Omega} \rangle | q \in Q \land \overrightarrow{\Omega} = (\Omega_b)_{b \in B}$ con $\Omega_b \in \mathcal{M}^* \}$ Cada estado del sistema de transición resultante es una configuración de $\mathcal{A}$ para una clase de equivalencia por comunicación interna,
-    \item $B$ es el conjunto de buffers de $\mathcal{A}$ que se utilizan en las aristas del LTS para denotar de comunicación interna
-    \item $\widehat{q_0}= \langle q_0, \Omega \rangle$ es el estado inicial de  donde $q_0$ es el estado inicial de $\mathcal{A}$ y $\Omega = \langle [], \ldots, [] \rangle$ es el conjunto de buffers en su estado inicial sin mensajes, y
-    \item $\widehat{\Delta}= \{\langle \langle q_i, \Omega \rangle, \widehat{\sigma},\langle q_j, \Omega' \rangle \rangle | q_i, q_j \in Q, \widehat{\sigma} \in \{B \times \{\gg, \ll\} \times \mathcal{M}\} \land \exists \sigma \in \Sigma$ tal que  $[q_i]_m \xrightarrow{\sigma} [q_j]_m \}$. Definimos $\widehat{\Delta}$ como la relación de transición de $\widehat{\mathcal{A}}$. Un estado de $\widehat{q_j}$ es alcanzable desde otro $\widehat{q_i}$ si la clase de equivalencia $[q_j]_m$ es alcanzable desde $[q_i]_\mathcal{M}$.
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Proyección de comunicación interna ejemplo}
@@ -548,4 +687,6 @@ Dadas las condiciones establecidas necesitamos probar:
     
 \end{frame}
 
+\bibliographystyle{alpha}
+\bibliography{bibdatabase}
 \end{document}
