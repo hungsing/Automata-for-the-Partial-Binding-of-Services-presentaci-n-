@@ -1,6 +1,7 @@
 %% Requires compilation with XeLaTeX or LuaLaTeX
 \documentclass[10pt,xcolor={table,dvipsnames},t]{beamer}
 
+\usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{amssymb}
 \usepackage{amsfonts,amsmath,amsthm} % Math packages
@@ -375,11 +376,8 @@ $$
 
 El primer problema es que no siempre ocurre. Como en este caso.
 
-\begin{figure}[H]
 \begin{center}
-\label{fig:ejemplo-weak-determinacy}
-\subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
-\label{fig:weak determinacy afca}
+\begin{tabular}{c}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -403,10 +401,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{out(sp,b)} (q_2)
         ; 
 \end{tikzpicture}
-}
-
-\subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
-\label{fig:weak determinacy mCFSM}
+\vspace{0.5in}\\
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
   \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
@@ -426,10 +421,8 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{sp!b} (q_2)
         ; 
 \end{tikzpicture}
-}
+\end{tabular}
 \end{center}
-\label{fig:weakdeterminacyviolation}
-\end{figure}
 \end{frame}
 
 \begin{frame}{Weak determinacy}
