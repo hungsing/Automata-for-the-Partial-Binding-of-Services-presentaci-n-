@@ -377,7 +377,6 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 \end{frame}
 
 \begin{frame}{Composición parcial}
-\begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
@@ -421,13 +420,11 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
         ;
 \end{tikzpicture} 
 \end{center}
-\end{figure}
     
 \end{frame}
 
 
 \begin{frame}{Composición parcial ejemplo}
-\begin{figure}[H]
 \begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
  \node[state,initial] (q_0)  {$q_{00}$}; 
  \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
@@ -482,9 +479,6 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
         ;
 \end{tikzpicture}
 
-% \caption{Composición parcial de los AFCAs de la Fig.~\ref{a_i}.}
-% \label{A-parcial}
-\end{figure}
 \end{frame}
 
 
@@ -573,7 +567,6 @@ El primer problema es que no siempre ocurre. Como en este caso.
 
 \begin{frame}{Equivalencia comunicacional}
 Si chequeamos compliance entre un conjunto de interfaces, queremos que la composición de los AFCA originales al internalizar la comunicación, los elementos comunicacionales que ahora son parte del autómata compuesto preserva las propiedades del CS que usé para chequear compliance.
-\begin{figure}[H]
 $$
 \xymatrix{   
 	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
@@ -581,14 +574,22 @@ $$
 	  \emptyset
 }
 $$
-% \caption{La composición de componentes asincrónicas preserva la semántica asincrónica de su interfaz de comunicación.}
-\end{figure}
-    
 \end{frame}
 
-\begin{frame}{Proyección de comunicación interna ejemplo}
-Dado el AFCA compuesto $\mathcal{A}= \langle \{q_{000},\ldots,q_{121}\}, \emptyset, \{PR,SP\}, \Sigma_{\mathcal{A}}, \delta_{\mathcal{A}}, \{q_{000}\}, \{q_{421}\} \rangle$
-\begin{figure}[H]
+\begin{frame}{Proyección de comunicación interna}
+\begin{itemize}
+    \item Como precondición pedimos que el AFCA sea weak determinate y no tenga transiciones de comunicación externa
+    \item Decimos que dos estados $q, q' \in Q$ son equivalentes por transiciones internas si puedo alcanzar $q'$ desde $q$ \textbf{sólo} por transiciones internas.
+    \item Llamamos $[q]_m$ a la clase de equivalencia por transiciones internas de $q$, es decir todos los estados a los que puedo llegar \textbf{sólo} por transiciones internas 
+    \item Tomamos las clases de equivalencia del AFCA
+    \item Construimos el LTS con las tuplas $\langle [q]_m, \overrightarrow{\Omega} \rangle$, donde $\overrightarrow{\Omega}$ es el estado de los buffers
+    \item Cada estado es una tupla que corresponde una configuración del autómata original desde la óptica de la comunicación
+    \item Cada transición está etiquetada con la transición del autómata original que lleva de una configuración a la otra
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Proyección de comunicación interna}
+Tomemos el siguiente AFCA
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_{000}$}; 
@@ -626,14 +627,9 @@ Dado el AFCA compuesto $\mathcal{A}= \langle \{q_{000},\ldots,q_{121}\}, \emptys
         ;
 \end{tikzpicture}
 \end{center}
-% \caption{Composición de los AFCAs de la Fig.~\ref{a_i}.}
-\label{A}
-\end{figure}
-
 \end{frame}
 
 \begin{frame}{Proyeción de comunicación interna}
-\begin{figure}[H]
 
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
@@ -660,9 +656,6 @@ Dado el AFCA compuesto $\mathcal{A}= \langle \{q_{000},\ldots,q_{121}\}, \emptys
       ;
 \end{tikzpicture}
 \end{center}
-\caption{Proyección de comunicación interna del AFCA  $\mathcal{A}$.}
-% \label{ex:pci}
-\end{figure}
 \end{frame}
 
 \begin{frame}{Equivalencia Comunicacional}
