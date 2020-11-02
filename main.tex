@@ -170,7 +170,7 @@ Problema: los autómatas de Muller no son compatibles con la noción de comunica
 
 \begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
 \begin{center}
-    \includegraphics[scale=0.5]{images/ARN0.png}
+    % \includegraphics[scale=0.5]{images/ARN0.png}
 \end{center}
 Respuesta: Cambiar el lenguaje de los hiper arcos.
 \end{frame}
@@ -428,47 +428,47 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 
 \begin{frame}{Composición parcial ejemplo}
 \begin{figure}[H]
-\begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
- \node[state,initial] (q_0)  {$q_{00}$}; 
- \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
- \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
- \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
- \node[state] (q_4) [below left= and 3 of q_0] {$q_{10}$};
-  \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
-   \node[state] (q_8) [below = and 3 of q_0 ] {$q_{20}$};
-  \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
-  \node[state] (q_7) [below = of q_9] {$q_{31}$};
-  \node[state] (q_5) [below right = of q_7 ] {$q_{32}$};
-  \node[state] (q_10) [below left= of q_7] {$q_{41}$};
- \node[state] (q_11) [below= 3cm of q_7] {$q_{42}$};
- \node[state] (q_13) [below= of q_6] {$q_{40}$};
- \node[state] (q_14) [below right= of q_5] {$q_{33}$}
- \node[state,accepting] (q_12) [below= of q_11] {$q_{43}$};
- \draw[]        
-        (q_0) edge[above] node{$int_r$} (q_1)
-        (q_0) edge[right] node{$in(SP,b)$} (q_8)
-        (q_0) edge[below] node{$PR \ll a$} (q_4)
-        (q_1) edge[right] node{$PR \ll a$} (q_2)
- 		(q_2) edge[right] node{$PR \gg a$} (q_3)
-    	(q_2) edge[right] node{$in(SP,b)$} (q_7)
-        (q_3) edge[right] node{$in(SP,b)$} (q_5) 
-        (q_4) edge[left] node{$in(SP,b)$} (q_6)
-        (q_6) edge[left] node{$int_r$} (q_7)
-        (q_6) edge[left] node{$int_p$} (q_13)
-        (q_7) edge[right] node{$PR \gg a$} (q_5)
-        (q_7) edge[left] node{$int_p$} (q_10)
-        (q_10) edge[left] node{$PR \gg a$} (q_11)
-        (q_8) edge[right] node{$int_r$} (q_9)
-        (q_8) edge[above] node{$PR \ll a$} (q_6)
-        (q_9) edge[right] node{$PR \ll a$} (q_7)
-        (q_5) edge[right] node{$int_p$} (q_11)
-        (q_5) edge[right] node{$Out(RS,C)$} (q_14)
-        (q_11) edge[right] node{$Out(RS,C$} (q_12)
-        (q_13) edge[left] node{$int_r$} (q_10)
-        (q_14) edge[right] node{$int_p$} (q_12)
-        ;
-\end{tikzpicture}
- \
+% \begin{tikzpicture}[->, thick,scale=0.5, every node/.style={transform shape}]
+%  \node[state,initial] (q_0)  {$q_{00}$}; 
+%  \node[state] (q_1) [ right=  3 of q_0] {$q_{01}$};
+%  \node[state] (q_2) [below = 1.5 of q_1 ] {$q_{11}$};
+%  \node[state] (q_3) [below = 2.5 of q_2 ] {$q_{12}$};
+%  \node[state] (q_4) [below left= and 3 of q_0] {$q_{10}$};
+%   \node[state] (q_6) [below = 1.5cm of q_4] {$q_{30}$};
+%   \node[state] (q_8) [below = and 3 of q_0 ] {$q_{20}$};
+%   \node[state] (q_9) [below =2 of q_8 ] {$q_{21}$};
+%   \node[state] (q_7) [below = of q_9] {$q_{31}$};
+%   \node[state] (q_5) [below right = of q_7 ] {$q_{32}$};
+%   \node[state] (q_10) [below left= of q_7] {$q_{41}$};
+%  \node[state] (q_11) [below= 3cm of q_7] {$q_{42}$};
+%  \node[state] (q_13) [below= of q_6] {$q_{40}$};
+%  \node[state] (q_14) [below right= of q_5] {$q_{33}$}
+%  \node[state,accepting] (q_12) [below= of q_11] {$q_{43}$};
+%  \draw[]        
+%         (q_0) edge[above] node{$int_r$} (q_1)
+%         (q_0) edge[right] node{$in(SP,b)$} (q_8)
+%         (q_0) edge[below] node{$PR \ll a$} (q_4)
+%         (q_1) edge[right] node{$PR \ll a$} (q_2)
+%  		(q_2) edge[right] node{$PR \gg a$} (q_3)
+%     	(q_2) edge[right] node{$in(SP,b)$} (q_7)
+%         (q_3) edge[right] node{$in(SP,b)$} (q_5) 
+%         (q_4) edge[left] node{$in(SP,b)$} (q_6)
+%         (q_6) edge[left] node{$int_r$} (q_7)
+%         (q_6) edge[left] node{$int_p$} (q_13)
+%         (q_7) edge[right] node{$PR \gg a$} (q_5)
+%         (q_7) edge[left] node{$int_p$} (q_10)
+%         (q_10) edge[left] node{$PR \gg a$} (q_11)
+%         (q_8) edge[right] node{$int_r$} (q_9)
+%         (q_8) edge[above] node{$PR \ll a$} (q_6)
+%         (q_9) edge[right] node{$PR \ll a$} (q_7)
+%         (q_5) edge[right] node{$int_p$} (q_11)
+%         (q_5) edge[right] node{$Out(RS,C)$} (q_14)
+%         (q_11) edge[right] node{$Out(RS,C$} (q_12)
+%         (q_13) edge[left] node{$int_r$} (q_10)
+%         (q_14) edge[right] node{$int_p$} (q_12)
+%         ;
+% \end{tikzpicture}
+%  \
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
@@ -590,16 +590,6 @@ Primero buscamos un criterio que garantice la preservación de la comunicación.
     
     \item Decimos que dos clases de equivalencia están relacionadas $[q]_m \xrightarrow{\sigma} [q']_m$ sii $\exists q_i \in [q]_m, q'_i \in [q']_m$ tales que $q_i \xrightarrow{\sigma} q'_i \in \delta_{\text{Buff}}$
 \end{enumerate}
-\end{frame}
-
-\begin{frame}{Proyección de comunicación interna}
-Tomando el AFCA $A$, weak determinate sin transiciones de comunicación externa, definimos la Proyección de Comunicación Interna $\Tau(A)$ como la proyección de la semántica de comunicación de $\mathcal{A}$. Llamamos $\widehat{\mathcal{A}}$ al sistema de transición etiquetado resultante y decimos que $\Tau (\langle Q, B, \mathcal{C}, \Sigma, q_0, \delta, F \rangle)= \langle \widehat{Q}, B, \widehat{q_0}, \widehat{\Delta} \rangle$ tal que:
-\begin{itemize}
-    \item $ \widehat{Q} = \{ \langle [q]_m, \overrightarrow{\Omega} \rangle | q \in Q \land \overrightarrow{\Omega} = (\Omega_b)_{b \in B}$ con $\Omega_b \in \mathcal{M}^* \}$ Cada estado del sistema de transición resultante es una configuración de $\mathcal{A}$ para una clase de equivalencia por comunicación interna,
-    \item $B$ es el conjunto de buffers de $\mathcal{A}$ que se utilizan en las aristas del LTS para denotar de comunicación interna
-    \item $\widehat{q_0}= \langle q_0, \Omega \rangle$ es el estado inicial de  donde $q_0$ es el estado inicial de $\mathcal{A}$ y $\Omega = \langle [], \ldots, [] \rangle$ es el conjunto de buffers en su estado inicial sin mensajes, y
-    \item $\widehat{\Delta}= \{\langle \langle q_i, \Omega \rangle, \widehat{\sigma},\langle q_j, \Omega' \rangle \rangle | q_i, q_j \in Q, \widehat{\sigma} \in \{B \times \{\gg, \ll\} \times \mathcal{M}\} \land \exists \sigma \in \Sigma$ tal que  $[q_i]_m \xrightarrow{\sigma} [q_j]_m \}$. Definimos $\widehat{\Delta}$ como la relación de transición de $\widehat{\mathcal{A}}$. Un estado de $\widehat{q_j}$ es alcanzable desde otro $\widehat{q_i}$ si la clase de equivalencia $[q_j]_m$ es alcanzable desde $[q_i]_\mathcal{M}$.
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Proyección de comunicación interna ejemplo}
