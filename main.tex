@@ -14,6 +14,7 @@
 \graphicspath{ {./images/} }
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage{float}
+\usepackage{enumitem}
 \usetikzlibrary{babel,automata,positioning,arrows}
 \newcommand{\Tau}{\mathrm{T}}
 \newtheorem{ejemplo}{Ejemplo}
@@ -165,41 +166,42 @@ La composición de una \textbf{actividad} con un \textbf{servicio} se realiza a 
 
 \begin{frame}{Asynchronous Relational Networks}
    \includegraphics[scale=0.45]{images/ARN9.png}
-Problema: los autómatas de Muller no son compatibles con la noción de comunicación
+Problema: el rol que tienen los autómatas de Muller que etiquetan los hiperarcos de comunicación es el de \textbf{orquestar} las interacciones entre procesos, obligando a los procesos a sincronizar sobre el al lenguaje compartido y posibilitando la asincronía sólo sobre las acciones internas.
 \end{frame}
 
-\begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
+\begin{frame}{Communicating Relational Networks\cite{vissani:places15}}
 \begin{center}
     \includegraphics[scale=0.5]{images/ARN0.png}
 \end{center}
-Respuesta: Cambiar el lenguaje de los hiper arcos.
+Respuesta: Reemplazar los autómatas de Muller de los hiperarcos de comunicación por una descripción de una \textbf{coreografía} basada en intercambio de mensajes.
 \end{frame}
 
-
-\begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
-\begin{itemize}
-    \item Se integraron \textbf{coreografías} (global graphs \cite{denielou:esop12}), que declaran el protocolo a seguir de los servicios a ser vinculados, desde el punto de vista de la actividad con \textbf{orquestación} (communicating finite state machines, CFSM, \cite{brand:jacm-30_2}) que declaran los mensajes que un participante está dispuesto a enviar y/o recibir desde el punto de vista del servicio.
-
-    \item Se definieron dos algoritmos para decidir la interoperabilidad en tiempo de ejecución utilizando los resultados introducidos por Lange et al. \cite{lange:popl15}
-\end{itemize}
-\end{frame}
 
 \begin{frame}{Communicating Relational Networks}
 \begin{itemize}
-    \item \textbf{Provides point}(los puntos conectados sólo a hiper arcos de proceso): se etiquetan con una \textbf{CFSM} que declara su único rol en la comunicación
-    \item \textbf{Hiper arcos de comunicación}: se etiquetan con un \textbf{global graph} que declara qué protocolo deben seguir los servicios que participan en la comunicación
-    \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Communicating Relational Networks}
-\begin{itemize}
-    \item \textbf{Coreografía (visión local) \cite{brand:jacm-30_2}:} las CFSMs  son autómatas finitos cuyos ejes se etiquetan con:  \begin{inparaenum}[a.]\item $P!m$ indicando que se le envía el mensaje $m$ al participante $P$ o \item $P?m$ indicando que el participante $P$ recibe el mensaje $m$
+    \item \textbf{Coreografía (visión local) \cite{brand:jacm-30_2}:} las Communicating Finite State Machines (CFSMs)  son autómatas finitos cuyos ejes se etiquetan con:  \begin{inparaenum}[a.]\item $P!m$ indicando que se le envía el mensaje $m$ al participante $P$ o \item $P?m$ indicando que el participante $P$ recibe el mensaje $m$
      \end{inparaenum}
     \item \textbf{Coreografía (visión global) \cite{denielou:esop12}}: los global graphs son autómatas finitos cuyos ejes se etiquetan con $P \rightarrow Q:m$ indicando que el participante $P$ envía el mensaje $m$ a $Q$.
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}{Communicating Relational Networks}
+\begin{itemize}
+    \item \textbf{Provides point} (los puntos conectados sólo a hiper arcos de proceso): se etiquetan con una \textbf{CFSM} que declara su rol individual en la comunicación
+    \item \textbf{Hiper arcos de comunicación}: se etiquetan con un \textbf{global graph} que declara el protocolo de envío y recepción de mensajes que seguirán los participantes en la comunicación
+    \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal. Se definieron dos algoritmos para decidir la interoperabilidad en forma automática. Uno de ellos utilizando la propiedad de \textbf{General Multiparty Compatibility (GMC)} presentada por Lange et al. \cite{lange:popl15}. El otro usa una adaptación del algoritmo de bisimulación.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{General Multiparty Compatibilty}
+Garantiza la ausencia de los tres errores más comunes en comunicación:
+  \begin{itemize}
+        \item \textbf{Deadlock:} todos los canales están vacíos y todas las máquinas terminaron su ejecución salvo una máquina que esperando un mensaje
+        \item \textbf{Recepción no especificada:} si una máquina tiene que recibir un mensaje pero el mensaje que está en el canal no es el mensaje que está esperando y no puede seguir ejecutando
+        \item \textbf{Mensaje huérfano:} todas las máquinas terminaron su ejecución pero quedó un mensaje en un canal
+    \end{itemize}
+\end{frame}
 
 \begin{frame}{Communicating Finite State Machines}
 
@@ -246,22 +248,19 @@ Respuesta: Cambiar el lenguaje de los hiper arcos.
 
 \begin{frame}{Orquestación a coreografías ventajas}
  \begin{itemize}
-     \item El modelo pasa a ser completamente asincrónico. No hay un servicio que coordine la comunicación sino que se coordina entre los participantes.
-    \item El chequeo de interoperabilidad se hace en el momento de la vinculación.
-    \item Confirmar la interoperabilidad entre componentes se reduce a probar la propiedad de General Multiparty Compatibilty (GMC) que garantiza la ausencia de tres errores: \begin{itemize}
-        \item \textbf{Deadlock:}todos los canales están vacíos y todas las máquinas terminaron su ejecución salvo una máquina que esperando un mensaje
-        \item \textbf{Recepción no especificada:} si una máquina tiene que recibir un mensaje pero el mensaje que está en el canal no es el mensaje que está esperando y no puede seguir ejecutando
-        \item \textbf{Mensaje huérfano:} todas las máquinas terminaron su ejecución pero quedó un mensaje en un canal
-    \end{itemize}
+     \item El modelo pasa a ser completamente asincrónico. No existe un orquestador explícito que coordine la comunicación sino que se coordina entre los participantes.
+    \item El chequeo de interoperabilidad se lleva a cabo en el momento de la vinculación a partir de un análisis estático
+    \item Al no contar con un orquestador explícito la cantidad de procesos involucrados en la comunicación es significativamente menor.
  \end{itemize}
 \end{frame}
 
 \begin{frame}{Orquestación a coreografías desventajas}
  \begin{itemize}
     \item Se pierde la noción de binding parcial. El chequeo de interoperabilidad requiere la presencia de todos los participantes de un canal
-    \item El leguaje de cómputo ahora es distino del lenguaje de comunicación
+    \item El leguaje de cómputo (autómatas de Muller/finitos) no guarda ninguna relación con el mecanismo de comunicación declarado en sus puertos (CFSM).
      \end{itemize}
 \end{frame}
+
 % \begin{frame}{Global Graphs y GMC}
 % Dado un conjunto de participantes $\mathcal{P}$ y sus respectivas CFSMs $M_p$ llamamos Communicating System (CS) a la tupla $S=(M_p)_{p \in \mathcal{P}}$ y un par $s=\langle \overrightarrow{q} ; \overrightarrow{\omega} \rangle$ a una configuración de $S$. General Multiparty Compatibility (GMC) es una condición sólida y completa para construir global graphs a partir de un CS. La condición de GMC garantiza que si el CS es seguro, es decir que carece de configuraciones de: 
 % \begin{itemize}
@@ -276,8 +275,7 @@ Respuesta: Cambiar el lenguaje de los hiper arcos.
 \begin{center}
     \includegraphics[scale=0.5]{images/ARN0.png}
 \end{center}
-Buscamos un formalismo que pueda modelar comunicación y cómputo, que permita asociar una semántica a la actividad completa a través de la composición de los autómatas involucrados y poder recuperar la noción de composición parcial para evitar el chequeo de interoperabilidad con todos los particiapntes.
-
+Deseamos reemplazar los autómatas de Muller/finitos utilizados para describir procesos por algún tipo de autómata que pueda relacionar los aspectos computacionales del proceso con los comunicacionales declarados en sus puertos. Adicionalmente pretendemos un mecanismo de composición parcial, es decir que no requiera de todos los participantes al momento de realizar el binding.
 \end{frame}
 
 \begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
