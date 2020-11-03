@@ -170,7 +170,7 @@ Problema: los autómatas de Muller no son compatibles con la noción de comunica
 
 \begin{frame}{Communicating Relational Networks \cite{vissani:places15}}
 \begin{center}
-    % \includegraphics[scale=0.5]{images/ARN0.png}
+    \includegraphics[scale=0.5]{images/ARN0.png}
 \end{center}
 Respuesta: Cambiar el lenguaje de los hiper arcos.
 \end{frame}
@@ -484,13 +484,13 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 
 \begin{frame}{MultiChannel CFSM y GMC}
 \begin{itemize}
-    \item Multichannel Communicating Finite State Machines (mCFSM). Son una extensión CFSMs con múltiples canales (al menos dos, uno en cada sentido) entre cada par de participantes.
+    \item \textbf{Multichannel Communicating Finite State Machines (mCFSM):} Son una extensión CFSMs con múltiples canales (al menos dos, uno en cada sentido) entre cada par de participantes.
     
-    \item Interfaz de comunicación de AFCA: mediante un procedimiento extraemos el comportamiento comunicacional en la forma de una mCFSM
+    \item \textbf{Interfaz de comunicación de AFCA:} mediante un procedimiento extraemos el comportamiento comunicacional en la forma de una mCFSM
     
-    \item Sistema emulado: Dado un multichannel CS $(M_p)_{p \in \mathcal{P}}$, agrandamos el conjunto $ \mathcal{P}$ agregando un participante adicional por cada canal en el sistema original $\mathcal{P}'=\mathcal{P} \cup \bigcup_{p \in \mathcal{P}} \{p^{pq_n} \ | \ pq_n \in \mathcal{C}_p \} \cup \bigcup_{p \in \mathcal{P}} \{p^{qp_n} \ | \ qp_n \in \mathcal{C}_p \}$. De este modo obtenemos un conjunto de CFSMs
+    \item \textbf{Sistema emulado:} Dado un multichannel CS $(M_p)_{p \in \mathcal{P}}$, agrandamos el conjunto $ \mathcal{P}$ agregando un participante adicional por cada canal en el sistema original $\mathcal{P}'=\mathcal{P} \cup \bigcup_{p \in \mathcal{P}} \{p^{pq_n} \ | \ pq_n \in \mathcal{C}_p \} \cup \bigcup_{p \in \mathcal{P}} \{p^{qp_n} \ | \ qp_n \in \mathcal{C}_p \}$. De este modo obtenemos un conjunto de CFSMs
     
-    \item GMC: Como el sistema emulado preserva errores comunicacionales, podemos utilizar el criterio de GMC para el chequeo de compliance entre componentes
+    \item \textbf{GMC:} Como el sistema emulado preserva errores comunicacionales, podemos utilizar el criterio de GMC para el chequeo de compliance entre componentes
 \end{itemize}
 
 \end{frame}
@@ -582,7 +582,7 @@ $$
     \item Decimos que dos estados $q, q' \in Q$ son equivalentes por transiciones internas si puedo alcanzar $q'$ desde $q$ \textbf{sólo} por transiciones internas.
     \item Llamamos $[q]_m$ a la clase de equivalencia por transiciones internas de $q$, es decir todos los estados a los que puedo llegar \textbf{sólo} por transiciones internas 
     \item Tomamos las clases de equivalencia del AFCA
-    \item Construimos el LTS con las tuplas $\langle [q]_m, \overrightarrow{\Omega} \rangle$, donde $\overrightarrow{\Omega}$ es el estado de los buffers
+    \item Construimos el LTS con las tuplas $\langle [q]_m, \overrightarrow{\Omega} \rangle$, donde $\overrightarrow{\Omega}$ es el contenido de los buffers para ese estado
     \item Cada estado es una tupla que corresponde una configuración del autómata original desde la óptica de la comunicación
     \item Cada transición está etiquetada con la transición del autómata original que lleva de una configuración a la otra
 \end{itemize}
@@ -674,7 +674,29 @@ Dadas las condiciones establecidas necesitamos probar:
 \begin{enumerate}
     \item \textbf{Equivalencia de estados discretos:} Para todo $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, existe $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$ tal que $q_i \in \overrightarrow{q} \iff q_i \in \overrightarrow{p}$ y viceversa.
     \item \textbf{Equivalencia entre buffers y canales:} Dados $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$. Queremos ver que el conjunto de buffers $B$ de $\mathcal{A}$ es el conjunto de canales internalizados de $\mathcal{C}$ de $M$. Es decir que para todo canal $\omega$ vale que $\omega \in \mathcal{C}$ si y solo si $\omega \in B$
+    \item \textbf{Equivalencia de las semánticas de las mFCSMs y los AFCAs:} Queremos ver que para todo para todo par de estados bisimilares $\widehat{q}=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $p=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, queremos probar que para toda transición que vaya de $\widehat{q}$ a $\widehat{q'}$ existe $p' \in P$, alcanzable desde $p$, tal que $\widehat{q'}$ y $p'$ son bisimilares. Y simétricamente para toda transición que vaya de $p$ a $p'$, existe $\widehat{q'} \in \widehat{Q}$, alcanzable desde $\widehat{q}$, tal que $\widehat{q'}$ y $p'$ son bisimilares
 \end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Conclusiones}
+El objetivo de esta tesis era el estudio y posible extensión de los modelos formales para servicios, partiendo del ideal de SOC un contexto que permita la reconfiguración dinámica de un artefacto de software a partir de posibilitar el binding en tiempo de ejecución. Para esto desarrollamos:
+\begin{itemize}
+    \item Un formalismo que soporte binding parcial, los AFCA que permiten internalizar el intercambio de mensajes como comportamiento interno al componer, preservando la comunicación externa de las componentes.
+    \item Para expresar la interfaz externa de comunicación de los AFCA propusimos las mCFSMs
+    \item Como método para garantizar que los distintos participantes puedan interoperar en forma segura extendimos la noción de GMC para mCFSM
+    \item Por último pudimos demostrar la equivalencia entre el comportamiento de la composición de un conjunto de AFCA y el de sus respectivas mCFSMs
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Trabajo futuro}
+\begin{itemize}
+    \item Queda por estudiar en mayor profundidad si el lenguaje cumple con las condiciones esperadas.
+    \item Definir formalmente la composición parcial de AFCAs y ver la relación entre un AFCA obtenido por una serie de composiciones parciales y uno de una composición total
+    \item Ver si es posible lingüísticamente generar autómatas weak determinate que al componerse den uno que también lo sea
+    \item Autómatas con comportamiento interno encapsulado los estados?
+\end{itemize}
+
     
 \end{frame}
 
