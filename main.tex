@@ -43,7 +43,7 @@
 
   \titlepage
   
-  {
+  
 
 {Director: Carlos G. Lopez Pombo}
 
@@ -54,7 +54,7 @@
 \vspace{.2cm}
 
 Buenos Aires, 2020
-}
+
 \end{frame}
 
 % Uncomment these lines for an automatically generated outline.
@@ -81,7 +81,7 @@ The Economist, Mayo 2003
  :} 
  The quality levels required for complex and critical systems for example in terms of reliability, resilience and automatic adaptation, still represent a major challenge given current software development methods and tools. Breakthroughs in this area could significantly improve the growth and competitiveness of the European industry and encourage faster innovation cycles.
 \textbf{Cloud Computing section of H2020 work programme 16/17 
-%\footnote{HORIZON 2020 – WORK PROGRAMME 20162017 LEIT – ICT. https://ec.europa.eu/research/participants/data/ref/h2020/wp/2016_2017/main/h2020-wp1617-leit-ict_en.pdf. pp. 19.} 
+%\footnote{HORIZON 2020 – WORK PROGRAMME20162017 LEIT – ICT. https://ec.europa.eu/research/participants/data/ref/h2020/wp/2016_2017/main/h2020-wp1617-leit-ict_en.pdf. pp. 19.} 
 :} Recent trends in cloud computing go towards the development of new paradigms (heterogeneous, federated, distributed clouds) as opposed to the current centralised model, with tight interactions between the computing and networking infrastructures.
 \end{frame}
 
@@ -294,7 +294,6 @@ Buscamos un formalismo que pueda modelar comunicación y cómputo, que permita a
 \end{frame}
 
 \begin{frame}{AFCA}
-\begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
@@ -334,9 +333,7 @@ Buscamos un formalismo que pueda modelar comunicación y cómputo, que permita a
         ;
 \end{tikzpicture} 
 \end{center}
-\end{figure}
 
-\begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.5, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
@@ -372,7 +369,7 @@ Buscamos un formalismo que pueda modelar comunicación y cómputo, que permita a
 \end{center}
 % \caption{mCFSM $M_P$, $M_R$ y $M_S$, correspondientes a los AFCAs de la Subfig.~\ref{a_i}.}
 % \label{m_i}
-\end{figure}
+
 Los AFCA P,R y S, y sus interfaces de comunicación.
 \end{frame}
 
@@ -499,11 +496,10 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 
 El primer problema es que no siempre ocurre. Como en este caso.
 
-\begin{figure}[H]
 \begin{center}
-\label{fig:ejemplo-weak-determinacy}
-\subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
-\label{fig:weak determinacy afca}
+% \label{fig:ejemplo-weak-determinacy}
+% \subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
+% \label{fig:weak determinacy afca}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -527,10 +523,9 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{out(sp,b)} (q_2)
         ; 
 \end{tikzpicture}
-}
+\
+% \subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
 
-\subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
-\label{fig:weak determinacy mCFSM}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
   \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
@@ -550,10 +545,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{sp!b} (q_2)
         ; 
 \end{tikzpicture}
-}
 \end{center}
-\label{fig:weakdeterminacyviolation}
-\end{figure}
 \end{frame}
 
 \begin{frame}{Problema de las interfaces: Weak determinacy}
@@ -561,7 +553,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
     \item La proyección de comunicación no refleja el comportamiento real de los autómatas que en el ejemplo quedan en deadlock.
     \item No se puede tener una situación donde la decisión interna de un autómata afecte a los mensajes que este puede recibir.
     \item Hay una hipótesis en cada punto en donde nosotros proyectamos la interfaz de comunicación del autómata exigiendo que sea weak determinate.
-    \item Weak determinacy garantiza que se pueden "ocultar" determinadas etiquetas sin afectar el comportamiento general del autómata. En nuestro caso las de cómputo con las de comunicación.
+    \item Weak determinacy garantiza que se pueden "ocultar" determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
 \end{itemize}
 \end{frame}
 
