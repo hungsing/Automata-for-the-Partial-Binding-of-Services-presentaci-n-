@@ -65,8 +65,9 @@ Buenos Aires, 2020
 
 \section{Introduction}
 \begin{frame}{Intro (Motivación)}
+
 \begin{center}
-    “Computing is becoming a utility and software a service. […] applications will no longer bea big chunk of software that runs on a computer but a combination of web services; and the platform for which developers write their programs will no longer be the operating system, but application servers.”
+"Computing is becoming a utility and software a service. […] applications will no longer bea big chunk of software that runs on a computer but a combination of web services; and the platform for which developers write their programs will no longer be the operating system, but application servers.”
 \end{center}
 The Economist, May 2003
 \begin{center}
@@ -113,14 +114,14 @@ En Service-oriented computing los sistemas de software tienen tres característi
 \begin{center}
 \includegraphics[scale=0.5]{images/ARN1.png}
 \end{center}
-Una ARN es una estructura bipartita basada en hipergrafos cuyos nodos son considerados \textbf{puertos}, y tiene dos tipos de hiper arcos, que se interpretan como \textcolor{com}{canales de comunicación} y \textcolor{proc}{pocesos}, respectivamente.
+Una ARN es una estructura bipartita basada en hipergrafos cuyos nodos son considerados \textbf{puertos}, y tiene dos tipos de hiperarcos, que se interpretan como \textcolor{com}{canales de comunicación} y \textcolor{proc}{pocesos}, respectivamente.
 \end{frame}
 
 \begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
 \begin{center}
 \includegraphics[scale=0.5]{images/ARN2.png}
 \end{center}
-Cada hiper arco es etiquetado con un \textcolor{muller}{autómata de Muller}. En el caso de los \textcolor{proc}{procesos} sobre el alfabeto de los \textbf{puertos} adyacentes y en el caso de los \textcolor{com}{canales de comunicación}, sobre un nuevo alfabeto al que los hiper ejes de los puertos se \textcolor{map}{mapean inyectivamente}  
+Cada hiperarco es etiquetado con un \textcolor{muller}{autómata de Muller}. En el caso de los \textcolor{proc}{procesos} sobre el alfabeto de los \textbf{puertos} adyacentes y en el caso de los \textcolor{com}{canales de comunicación}, sobre un nuevo alfabeto al que los hiper ejes de los puertos se \textcolor{map}{mapean inyectivamente}  
 \end{frame}
 
 \begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
@@ -188,8 +189,8 @@ Respuesta: Reemplazar los autómatas de Muller de los hiperarcos de comunicació
 
 \begin{frame}{Communicating Relational Networks}
 \begin{itemize}
-    \item \textbf{Provides point} (los puntos conectados sólo a hiper arcos de proceso): se etiquetan con una \textbf{CFSM} que declara su rol individual en la comunicación
-    \item \textbf{Hiper arcos de comunicación}: se etiquetan con un \textbf{global graph} que declara el protocolo de envío y recepción de mensajes que seguirán los participantes en la comunicación
+    \item \textbf{Provides point} (los puntos conectados sólo a hiperarcos de proceso): se etiquetan con una \textbf{CFSM} que declara su rol individual en la comunicación
+    \item \textbf{Hiperarcos de comunicación}: se etiquetan con un \textbf{global graph} que declara el protocolo de envío y recepción de mensajes que seguirán los participantes en la comunicación
     \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal. Se definieron dos algoritmos para decidir la interoperabilidad en forma automática. Uno de ellos utilizando la propiedad de \textbf{General Multiparty Compatibility (GMC)} presentada por Lange et al. \cite{lange:popl15}. El otro usa una adaptación del algoritmo de bisimulación.
 \end{itemize}
 \end{frame}
@@ -495,9 +496,6 @@ Los AFCA P,R y S, y sus interfaces de comunicación.
 El primer problema es que no siempre ocurre. Como en este caso.
 
 \begin{center}
-% \label{fig:ejemplo-weak-determinacy}
-% \subfloat[1][Automatas Finitos de Comunicación Asincrónica S y P]{
-% \label{fig:weak determinacy afca}
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -511,7 +509,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_2) edge[right] node{in(sp,b)} (q_4)
         ; 
 \end{tikzpicture}
-\qquad
+\
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -521,8 +519,9 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{out(sp,b)} (q_2)
         ; 
 \end{tikzpicture}
-\
-% \subfloat[2][Las mCFSM $M_S$ y $M_P$, correspondientes a los autómatas $S$ y $P$, respectivamente]{
+\end{center}
+
+\begin{center}
 
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
@@ -533,7 +532,7 @@ El primer problema es que no siempre ocurre. Como en este caso.
         (q_0) edge[right] node{sp?b} (q_2)
         ; 
 \end{tikzpicture}
-\qquad
+\
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$[q_0]$}; 
  \node[state] (q_1) [below = of q_0 ] {$[q_1]$};
