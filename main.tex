@@ -24,6 +24,7 @@
 \definecolor{map}{RGB}{179, 106, 226}
 \definecolor{prov}{RGB}{243, 144, 25}
 \definecolor{req}{RGB}{220, 189, 35}
+\input{tizmacros}
 
 \title{Auómatas para la vinculación parcial de servicios}
 \author{Ezequiel Davidovich Caballero}
@@ -203,7 +204,7 @@ Garantiza la ausencia de los tres errores más comunes en comunicación:
 \end{frame}
 
 \begin{frame}{Nuevo modelo basado en coreografías}
-
+Communicating finite state machines $p$, $r$ y $s$, y el global graph que representa la comunicación entre las tres.
 \begin{center}
 \begin{tabular}{ccc}
    p &   r & s\\
@@ -214,43 +215,55 @@ Garantiza la ausencia de los tres errores más comunes en comunicación:
  \node[state] (q_3) [right= of q_2 ] {$q_3$};
  \draw[]        
         (q_0) edge[above] node{pr!a} (q_1)
-        (q_0) edge[right] node{sp?b} (q_2)
+        (q_0) edge[left] node{sp?b} (q_2)
         (q_1) edge[right] node{sp?b} (q_3)
         (q_2) edge[above] node{pr!a} (q_3)
         ; 
 \end{tikzpicture} 
 &
-\begin{tikzpicture}[->, thick]
+\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state] (q_2) [below= of q_1 ] {$q_2$};
 
  \draw[]        
         
         (q_0) edge[right] node{pr?a} (q_1)
+        (q_1) edge[right] node{rs!c} (q_2)        
         
         ;
 \end{tikzpicture} 
 &
-\begin{tikzpicture}[->, thick]
+\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
+ \node[state] (q_2) [below= of q_1 ] {$q_2$};
 
  \draw[]        
         
         (q_0) edge[right] node{sp!b} (q_1)
-        
+        (q_1) edge[right] node{rs?c} (q_2)        
         ;
 \end{tikzpicture} 
 \end{tabular}
 \end{center}
-\begin{tikzpicture}[->, thick]
-\node[circle] (1) {};
-\node[diamond] (2) [below= of 1] {$+$};
+\begin{center}
+\begin{tikzpicture}[->, thick, rounded corners, scale=0.8, every node/.style={transform shape}]
+\node[source] (1) {};
+\node[ogate] (2) [below = of 1] {};
+\node[block] (3) [below left= of 2] {$p \rightarrow r:a$};
+\node[block] (4) [below right= of 2] {$s \rightarrow p:b$};
+\node[block] (5) [below= 2 cm of 2] {$r \rightarrow s:c$};
+\draw	
+	(1) edge[line] (2.north);
+    \draw[line] (2.east) -| (3.north);
+    \draw[line] (2.west) -| (4.north);
+    \draw[line] (3.south) |- (5);
+    \draw[line] (4.south) |- (5);
 
-\draw[]
-	(1) edge (2)
-;
 \end{tikzpicture}
+
+\end{center}
 \end{frame}
 
 \begin{frame}{Ventajas del nuevo modelo de comunicación}
@@ -302,6 +315,7 @@ Garantiza la ausencia de los tres errores más comunes en comunicación:
 \end{frame}
 
 \begin{frame}{Autómatas Finitos de Comunicación Asincrónica}
+Los AFCA P,R y S, y sus interfaces de comunicación.
 \begin{center}
 \begin{tikzpicture}[->, thick, scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
@@ -385,7 +399,6 @@ Garantiza la ausencia de los tres errores más comunes en comunicación:
 % \caption{mCFSM $M_P$, $M_R$ y $M_S$, correspondientes a los AFCAs de la Subfig.~\ref{a_i}.}
 % \label{m_i}
 
-Los AFCA P,R y S, y sus interfaces de comunicación.
 \end{frame}
 
 %\begin{frame}{Composición parcial}
@@ -564,15 +577,6 @@ Dados los AFCA del ejemplo anterior, componemos $P$ y $R$:
 \end{tabular}
 \end{frame}
 
-\begin{frame}{Problema de las interfaces: Weak determinacy}
-\begin{itemize}
-    \item La proyección de comunicación no refleja el comportamiento real de los autómatas que en el ejemplo quedan en deadlock.
-    \item No se puede tener una situación donde la decisión interna de un autómata afecte a los mensajes que este puede recibir.
-    \item Hay una hipótesis en cada punto en donde nosotros proyectamos la interfaz de comunicación del autómata exigiendo que sea weak determinate.
-    \item Weak determinacy garantiza que se pueden "ocultar" determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Equivalencia comunicacional}
 Al chequear compliance entre un conjunto de interfaces, queremos que el comportamiento comunicacional que ahora está internalizado sea el mismo que en el communicating system original. 
 $$
@@ -665,14 +669,16 @@ Tomemos el siguiente AFCA
 \end{frame}
 
 \begin{frame}{Equivalencia Comunicacional}
-Para ver que la composición preserva la semántica comunicacional de un conjunto de AFCA  y sus respectivas mCFSMs queremos probar que $\widehat{\mathcal{A}}$ y $M$ son bisimilares. Para lo cual necesitamos que: 
+Queremos ver que sean:
 \begin{enumerate}
-    \item $\{\mathcal{A}\}_{1 \leq i \leq n}$ sea un conjunto de weak determinate AFCA sin transiciones de comunicación interna
-    \item su composición $\mathcal{A}$, también es weak determinate
-    \item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
-    \item $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs
-    \item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ el LTS que representa la semántica del CS
+\item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
+\item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
+\item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
+\item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
 \end{enumerate}
+
+\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares
+}
 \end{frame}
 
 \begin{frame}{Equivalencia Comunicacional}
