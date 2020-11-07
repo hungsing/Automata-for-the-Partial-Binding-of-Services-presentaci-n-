@@ -1,0 +1,40 @@
+ e
+2-3)En el año 2003 un medio que ni siquiera es especializado en el tema ya vislumbraba que el software iba a dejar de ser algo monolítico y que iba a operar en forma distribuida.  Hoy por hoy prácticamente todo lo que hacemos está mediado por la utilización de algún servicio web. No sólo los programas que utilizamos, sino los que usamos para programar como son los servicios de hosting para los proyectos, los servicios para project management, todos esos sons servicios web que utilizamos y por lo tanto hasta el desarrollo de software ya es remoto y distribuido.
+
+4) Service Oriented Computing: Un paradigma de sistemas distribuidos que utiliza servicios como elementos fundamentales para el desarrollo de aplicaciones
+
+5-6) Explicar las arns según texto. 
+
+7) Autómatas de Muller: a efectos prácticos son autómatas finitos, con una condición de aceptación infinitaria. El autómata de Muller asociado a un puerto modela el comportamiento del proceso. El del canal de comunicación modela el protocolo de comunicación de los procesos conectados a estos puertos. Esta distinción de roles va a ser de importancia más adelante.
+
+8-9) Los nodos únicamente adyacentes a procesos son provides points, son puertos a través de los cuales se provee el servicio modelado por el proceso.  Los nodos únicamente adyacentes a canales de comunicación son requires points, son puertos a través de los cuales el proceso que está ejecutando se va a conectar con un servicio que es requerido.
+
+10-11) Si una ARN tiene provides points se la denomina servicio. Si solo tiene requires points se la denomina actividad porque no exporta, solo usa.
+
+12-14) La composición de una actividad con un servicio se realiza a través de un mapeo inyectivo del leguaje de un requires points de una actividad al de un un provides point de un servicio (Mapeo inyectivo (por si preguntan): requerimiento técnico que impide que dos mensajes del puerto queden pegados como una transición del autómata. Obliga a que el autómata tenga tantas transiciones como mensajes aparecen en los puertos.) 
+
+15) En este modelo de ARNs original el comportamiento de comunicación lo formaliza un autómata de Muller que modela el protocolo de comunicación entre dos puertos. La forma en que lo hace obliga a los procesos a sincronizar sobre el lenguaje compartido y solo las acciones internas pueden ser asincrónicas. Esto definitivamente no es la interpretación del paradigma que buscamos.
+
+16) El modelo con autómatas de Muller era uno de orquestación donde la lógica se define desde un único punto de vista central lo que lo que reduce su escalabilidad como modelo. Una alternativa es un modelo basado en coreografías que se expresa como la comunicación directa etre servicios sin ningún actor central lo cual lo hace más escalable pero más difícil de especificar e implementar
+
+17-18) Pasamos entonces de un modelo de coreografías donde tenemos dos visiones compatibles. Una local basada en Communicating Finite State Machines y una global basada en global graphs. Donde los provides points son cfsms y los hiperarcos de comunicación son global graphs. Sumamos un chequeo estático de compliance mediante GMC y/o bisimulación
+
+19) GMC me previene de estos tres errores.
+
+20) Descripción breve de las cfsms y el global graph.
+
+21-22) Ventajas: todo asincrónico, lindo y bonito, visiones compatibles, chequeo de compliance y desventajas chau binding parcial
+
+23) Sobre el dibujo de slide 43: el chequeo de compliance requiere que todas las vistas locales sean compatibles con la vist global. Para hacer el binding sobre el requires de los hoteles necesito también satidfacer lo del de vuelos. 
+
+24) (Viniendo de la 23) AFCA as the slide says
+
+25) tres autómatas con sus cfssms explicar
+26) explicar la composición y como termino teniendo dos interacciones distintas por canales distintos con S por eso las cfsms clásicas no nos alcanzan
+
+27) Enter: mcfsm 
+28) Explicar como se rompe todo en el ejemplo, las acciones internas me cortan caminos y me llevan a un deadlock
+29 -30) explicar diagrama L' es esto de acá
+31-32) explicar ambos dibujitos
+33-34) concretamente qué queremos probar y como lo hacemos
+35-36) Qué logramos y qué falta.

@@ -87,7 +87,7 @@ Buenos Aires, 2020
 
 \begin{frame}{Service-oriented Computing}
  \vspace{\fill}
-En Service-oriented computing los sistemas de software tienen tres características distintivas:
+En nuestra visión Service-oriented computing los sistemas de software tienen tres características distintivas:
 \begin{itemize}
   \item \textbf{Reconfiguración dinámica:} la estructura del sistema varía en tiempo de ejecución a medida que este va requiriendo servicios externos para completar una tarea necesaria para cumplir su objetivo
 
@@ -150,12 +150,23 @@ Los nodos que son únicamente adyacentes a \textcolor{proc}{procesos} se denomin
 \begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
  \vspace{\fill}
 \begin{center}
-\includegraphics[scale=0.5]{images/ARN5.png}
+\includegraphics[scale=0.5]{images/ARN4.png}
 \end{center}
  \vspace{\fill}
 Si una ARN tiene \textcolor{prov}{provides points}, se dice que es un \textbf{servicio} porque puede ser vinculado a través de los mismos.
  \vspace{\fill}
 \end{frame}
+
+\begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
+ \vspace{\fill}
+\begin{center}
+\includegraphics[scale=0.5]{images/ARN5.png}
+\end{center}
+ \vspace{\fill}
+Si una ARN tiene \textcolor{prov}{provides points}, se dice que es un \textbf{servicio} porque puede ser vinculado a través de los mismos. Si sólo tiene \textcolor{req}{requires points}, se dice que es una \textbf{actividad}, es decir que no exporta funcionalidad
+ \vspace{\fill}
+\end{frame}
+
 
 \begin{frame}{Asynchronous Relational Nets \cite{fiadeiro:fase2011}}
  \vspace{\fill}
@@ -213,7 +224,7 @@ La composición de una \textbf{actividad} con un \textbf{servicio} se realiza a 
 \begin{itemize}
     \item \textbf{Coreografía (visión local) \cite{brand:jacm-30_2}:} las Communicating Finite State Machines (CFSMs)  son autómatas finitos cuyos ejes se etiquetan con:  \begin{inparaenum}[a.]\item $P!m$ indicando que se le envía el mensaje $m$ al participante $P$ o \item $P?m$ indicando que el participante $P$ recibe el mensaje $m$
      \end{inparaenum}
-    \item \textbf{Coreografía (visión global) \cite{denielou:esop12}}: los global graphs son autómatas finitos cuyos ejes se etiquetan con $P \rightarrow Q:m$ indicando que el participante $P$ envía el mensaje $m$ a $Q$.
+    \item \textbf{Coreografía (visión global) \cite{denielou:esop12}}: los global graphs son autómatas finitos cuyos nodos se etiquetan con $P \rightarrow Q:m$ indicando que el participante $P$ envía el mensaje $m$ a $Q$.
 \end{itemize}
  \vspace{\fill}
 \end{frame}
@@ -259,7 +270,7 @@ Communicating finite state machines $p$, $r$ y $s$, y el global graph que repres
         ; 
 \end{tikzpicture} 
 &
-\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.7, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
  \node[state] (q_2) [below= of q_1 ] {$q_2$};
@@ -272,7 +283,7 @@ Communicating finite state machines $p$, $r$ y $s$, y el global graph que repres
         ;
 \end{tikzpicture} 
 &
-\begin{tikzpicture}[->, thick,scale=0.8, every node/.style={transform shape}]
+\begin{tikzpicture}[->, thick,scale=0.7, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below= of q_0 ] {$q_1$};
  \node[state] (q_2) [below= of q_1 ] {$q_2$};
