@@ -28,7 +28,7 @@
 
 \title{Auómatas para la vinculación parcial de servicios}
 \author{Ezequiel Davidovich Caballero}
-\institute{Departamento de Computación, Facultad de Ciencias Exactas y Naturales}
+\institute{Departamento de Computación, Facultad de Ciencias Exactas y Naturales, Universidad de Buenos Aires}
 \date{11 de Noviembre 2020}
 
 
@@ -36,7 +36,6 @@
 
 
 \begin{frame}
-\vspace{-2cm}
 \begin{center}
 \begin{tabular}{l}
 \includegraphics[width=2cm]{logofcen.pdf}
@@ -116,7 +115,7 @@ En nuestra visión Service-oriented computing los sistemas de software tienen tr
 \includegraphics[scale=0.5]{images/ARN1.png}
 \end{center}
  \vspace{\fill}
-Una ARN es una estructura bipartita basada en hipergrafos cuyos nodos son considerados \textbf{puertos}, y tiene dos tipos de hiperarcos, que se interpretan como \textcolor{com}{canales de comunicación} y \textcolor{proc}{pocesos}, respectivamente.
+Una ARN es una estructura bipartita basada en hipergrafos cuyos son considerados \textbf{puertos}, y tiene dos tipos de hiperarcos, que se interpretan como \textcolor{com}{canales de comunicación} y \textcolor{proc}{pocesos}, respectivamente.
  \vspace{\fill}
 \end{frame}
 
@@ -305,6 +304,7 @@ Communicating finite state machines $p$, $r$ y $s$, y el global graph que repres
 \node[block] (4) [below right= of 2] {$s \rightarrow p:b$};
 \node[ogate] (5) [below = 2cm of 2] {};
 \node[block] (6) [below= of 5] {$r \rightarrow s:c$};
+\node[sink]  (7) [right= of 6] {}; 
 \draw	
 	(1) edge[line] (2.north);
     \draw[line] (2) -| (3.north);
@@ -312,6 +312,7 @@ Communicating finite state machines $p$, $r$ y $s$, y el global graph que repres
     \draw[line] (3.south) |- (5);
     \draw[line] (4.south) |- (5);
     \draw[] (5) edge[line] (6.north);
+    \draw[] (6) edge[line] (7);
 
 \end{tikzpicture}
 \end{center}
@@ -332,9 +333,9 @@ Communicating finite state machines $p$, $r$ y $s$, y el global graph que repres
  \vspace{\fill}
  \begin{itemize}
     \item Se pierde la noción de binding parcial. El chequeo de interoperabilidad requiere la presencia de todos los participantes de un canal
-    \item El leguaje de cómputo (autómatas de Muller/finitos) no guarda ninguna relación con el mecanismo de comunicación declarado en sus puertos (CFSM).
+    \item El lenguaje de cómputo (autómatas de Muller/finitos) no guarda ninguna relación con el mecanismo de comunicación declarado en sus puertos (CFSM).
      \end{itemize}
-\vspace{\fill}
+ \vspace{\fill}
 \end{frame}
 
 % \begin{frame}{Global Graphs y GMC}
@@ -593,6 +594,7 @@ Dados los AFCA del ejemplo anterior, componemos $P$ y $R$:
 
 \begin{center}
 \begin{tabular}{cccc}
+S & P & $M_S$ & $M_P$ \\
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -642,7 +644,7 @@ Dados los AFCA del ejemplo anterior, componemos $P$ y $R$:
 \begin{itemize}
 \item No se puede tener una situación donde la decisión interna de un autómata afecte a los mensajes que este puede recibir.
 \item Hay una hipótesis en cada punto en donde nosotros proyectamos la interfaz de comunicación del autómata exigiendo que sea weak determinate.
-\item Weak determinacy garantiza que se pueden ``ocultar`` determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
+\item Weak determinacy [\ref{milner89}] garantiza que se pueden ``ocultar`` determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
 \end{itemize} 
 \vspace{\fill}
 \end{frame}
@@ -664,7 +666,7 @@ $$
  \vspace{\fill}
 \begin{itemize}
     \item Como hipótesis pedimos que el AFCA sea weak determinate y no tenga transiciones de comunicación externa
-    \item Decimos que dos estados $q, q' \in Q$ son equivalentes por transiciones internas si $q'$ y $q$ están conectados \textbf{sólo} por transiciones internas. Llamamos $[q]_m$ a la clase de equivalencia por transiciones internas de $q$, es decir todos los estados conectados con $q$ \textbf{sólo} por transiciones internas 
+    \item Decimos que dos estados $q, q' \in Q$ son equivalentes por transiciones internas si $q'$ y $q$ están conectados \textbf{sólo} por transiciones internas. Llamamos $[q]_m$ a la clase de equivalencia por comunicación interna de $q$, es decir todos los estados conectados con $q$ \textbf{sólo} por transiciones internas 
     \item Construimos el LTS con las tuplas $\langle [q]_m, \overrightarrow{\Omega} \rangle$, donde $[q]_m$ es la clase de equivalencia de $q$ y $\overrightarrow{\Omega}$ es el contenido de los buffers para ese estado
     \item Cada estado es una tupla que corresponde una configuración del autómata original desde la óptica de la comunicación
     \item Cada transición está etiquetada con la transición de comunicación interna del AFCA original que lleva de una configuración a la otra
@@ -769,6 +771,18 @@ Dadas las condiciones establecidas necesitamos probar:
     \item \textbf{Equivalencia de las semánticas de las mFCSMs y los AFCAs:} Queremos ver que para todo para todo par de estados bisimilares $\widehat{q}=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $p=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, queremos probar que para toda transición que vaya de $\widehat{q}$ a $\widehat{q'}$ existe $p' \in P$, alcanzable desde $p$, tal que $\widehat{q'}$ y $p'$ son bisimilares. Y simétricamente para toda transición que vaya de $p$ a $p'$, existe $\widehat{q'} \in \widehat{Q}$, alcanzable desde $\widehat{q}$, tal que $\widehat{q'}$ y $p'$ son bisimilares
 \end{enumerate}
  \vspace{\fill}
+\end{frame}
+
+\begin{frame}{Equivalencia comunicacional}
+\vspace{\fill}
+$$
+\xymatrix{   
+	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+	  {||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[r]_{\ \ \ \ \Tau(A)} \ar[d]_{\Pi} & \widehat{\mathcal{A}} & = & {\mathcal{M}}  \\
+	  \emptyset
+}
+$$
+\vspace{\fill}
 \end{frame}
 
 \begin{frame}{Conclusiones}
