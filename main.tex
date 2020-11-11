@@ -234,12 +234,13 @@ La composición de una \textbf{actividad} con un \textbf{servicio} se realiza a 
 \begin{itemize}
     \item \textbf{Provides point} (los puntos conectados sólo a hiperarcos de proceso): se etiquetan con una \textbf{CFSM} que declara su rol individual en la comunicación
     \item \textbf{Hiperarcos de comunicación}: se etiquetan con un \textbf{global graph} que declara el protocolo de envío y recepción de mensajes que seguirán los participantes en la comunicación
-    \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal. Se definieron dos algoritmos para decidir la interoperabilidad en forma automática. Uno de ellos utilizando la propiedad de \textbf{General Multiparty Compatibility (GMC)} presentada por Lange et al. \cite{lange:popl15}. El otro usa una adaptación del algoritmo de bisimulación.
+    \item \textbf{Interoperabilidad:} se reduce a un chequeo de compliance del conjunto de \textbf{CFSMs} con el \textbf{global graph} de ese canal. Se definieron dos algoritmos para decidir la interoperabilidad en forma automática. Uno de ellos utilizando la propiedad de \textbf{General Multiparty Compatibility (GMC)} presentada por Lange et al. \cite{lange:popl15}. El otro usa una adaptación del chequeo de bisimulación \footnote{•} para cfms.
 \end{itemize}
  \vspace{\fill}
 \end{frame}
 
 \begin{frame}{General Multiparty Compatibilty}
+\vspace{\fill}
 Garantiza la ausencia de los tres errores más comunes en comunicación:
  \begin{itemize}
         \item \textbf{Deadlock:} todos los canales están vacíos y todas las máquinas terminaron su ejecución salvo una máquina que esperando un mensaje
@@ -594,7 +595,7 @@ Dados los AFCA del ejemplo anterior, componemos $P$ y $R$:
 
 \begin{center}
 \begin{tabular}{cccc}
-S & P & $M_S$ & $M_P$ \\
+P & S & $M_P$ & $M_S$ \\
 \begin{tikzpicture}[->, thick,scale=0.6, every node/.style={transform shape}]
  \node[state,initial] (q_0)   {$q_0$}; 
  \node[state] (q_1) [below = of q_0 ] {$q_1$};
@@ -750,6 +751,10 @@ Tomemos el siguiente AFCA
 
 \begin{frame}{Equivalencia Comunicacional}
  \vspace{\fill}
+\begin{tabular}{cc}
+
+
+\begin{minipage}{2.1in}
 Sean:
 \begin{enumerate}
 \item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
@@ -757,9 +762,49 @@ Sean:
 \item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
 \item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
 \end{enumerate}
-
 \textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
+\end{minipage}
+&
+\begin{minipage}{2in}
+$$
+\xymatrix@C=0.5em{
+	1.\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & 3.\{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+	  {1.||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  2. \widehat{\mathcal{A}} =& 4. M  \\
+	  \emptyset
+}
+$$
+\end{minipage}
+\end{tabular}
  \vspace{\fill}
+\end{frame}
+
+\begin{frame}{Equivalencia Comunicacional}
+Sean:
+\begin{enumerate}
+\item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
+\item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
+\item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
+\item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
+\end{enumerate}
+\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
+$$
+\xymatrix@C=0.5em{
+	1.\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & 3.\{C_i\}_{i \in I}  \ar[d]_{(4)semantica}  \\
+	  {1.||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  2. \widehat{\mathcal{A}} =& 4. M  \\
+	  \emptyset
+}
+$$
+\end{frame}
+
+\begin{frame}{bisimilaridad}
+\vspace{\fill}
+Dado un sistema de transición etiquetado $ S = \langle Q, \Sigma, \delta \rangle $, una \emph{bisimulación} es una relación binaria $R \subseteq Q \times Q$, tal que: para cada par de elementos $p, q \in Q$ tal que $\langle p, q \rangle \in R$ vale:
+\begin{itemize}
+    \item $(\forall \sigma \in \Sigma)(p \xrightarrow{\sigma} p' \implies (\exists q' \in Q)(q \xrightarrow{\sigma} q' \land \langle p', q' \rangle \in R))$ y, simétricamente, vale 
+    \item $(\forall \sigma \in \Sigma)(q \xrightarrow{\sigma} q' \implies (\exists p' \in Q)(p \xrightarrow{\sigma} p' \land \langle p', q' \rangle \in R))$
+\end{itemize}
+Dados dos estados $p, q \in Q $, $p$ es bisimilar a $q$, si existe una bisimulación $R$ tal que $\langle p, q \rangle \in R$.
+\vspace{\fill}
 \end{frame}
 
 \begin{frame}{Equivalencia Comunicacional}
@@ -767,22 +812,9 @@ Sean:
 Dadas las condiciones establecidas necesitamos probar:
 \begin{enumerate}
     \item \textbf{Equivalencia de estados discretos:} Para todo $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, existe $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$ tal que $q_i \in \overrightarrow{q} \iff q_i \in \overrightarrow{p}$ y viceversa.
-    \item \textbf{Equivalencia entre buffers y canales:} Dados $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$. Queremos ver que el conjunto de buffers $B$ de $\mathcal{A}$ es el conjunto de canales internalizados de $\mathcal{C}$ de $M$. Es decir que para todo canal $\omega$ vale que $\omega \in \mathcal{C}$ si y solo si $\omega \in B$
+    \item \textbf{Equivalencia entre canales de las mCFSMs y buffers de los AFCAs:} Dados $\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $\langle \overrightarrow{p}, \overrightarrow{\Omega_{\mathcal{C}}} \rangle \in P$. Queremos ver que el conjunto de buffers $B$ de $\mathcal{A}$ es el conjunto de canales internalizados de $\mathcal{C}$ de $M$. Es decir que para todo canal $\omega$ vale que $\omega \in \mathcal{C}$ si y solo si $\omega \in B$
     \item \textbf{Equivalencia de las semánticas de las mFCSMs y los AFCAs:} Queremos ver que para todo para todo par de estados bisimilares $\widehat{q}=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$ y $p=\langle [\overrightarrow{q}]_m, \overrightarrow{\Omega} \rangle \in \widehat{Q}$, queremos probar que para toda transición que vaya de $\widehat{q}$ a $\widehat{q'}$ existe $p' \in P$, alcanzable desde $p$, tal que $\widehat{q'}$ y $p'$ son bisimilares. Y simétricamente para toda transición que vaya de $p$ a $p'$, existe $\widehat{q'} \in \widehat{Q}$, alcanzable desde $\widehat{q}$, tal que $\widehat{q'}$ y $p'$ son bisimilares
 \end{enumerate}
- \vspace{\fill}
-\end{frame}
-
-\begin{frame}{Equivalencia comunicacional}
-\vspace{\fill}
-$$
-\xymatrix{   
-	\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & \{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
-	  {||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[r]_{\ \ \ \ \Tau(A)} \ar[d]_{\Pi} & \widehat{\mathcal{A}} & = & {\mathcal{M}}  \\
-	  \emptyset
-}
-$$
-\vspace{\fill}
 \end{frame}
 
 \begin{frame}{Conclusiones}
@@ -806,6 +838,11 @@ El objetivo de esta tesis era el estudio y posible extensión de los modelos for
     \item Autómatas con comportamiento interno encapsulado los estados?
 \end{itemize}
  \vspace{\fill}
+\end{frame}
+
+\begin{frame}{Preguntas, comentarios}
+\includegraphics[scale=0.5]{images/any question.jpg}
+
 \end{frame}
 
 \bibliographystyle{alpha}
