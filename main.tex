@@ -645,7 +645,7 @@ P & S & $M_P$ & $M_S$ \\
 \begin{itemize}
 \item No se puede tener una situación donde la decisión interna de un autómata afecte a los mensajes que este puede recibir.
 \item Hay una hipótesis en cada punto en donde nosotros proyectamos la interfaz de comunicación del autómata exigiendo que sea weak determinate.
-\item Weak determinacy [\ref{milner89}] garantiza que se pueden ``ocultar`` determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
+\item Weak determinacy \cite{milner89} garantiza que se pueden ``ocultar`` determinadas etiquetas sin afectar el comportamiento genral del autómata. En nuestro caso las de cómputo con las de comunicación.
 \end{itemize} 
 \vspace{\fill}
 \end{frame}
@@ -801,7 +801,7 @@ $$
 
 \end{frame}
 
-\begin{frame}{bisimilaridad}
+\begin{frame}{Bisimulación \cite{milner89}}
 \vspace{\fill}
 Dado un sistema de transición etiquetado $ S = \langle Q, \Sigma, \delta \rangle $, una \emph{bisimulación} es una relación binaria $R \subseteq Q \times Q$, tal que: para cada par de elementos $p, q \in Q$ tal que $\langle p, q \rangle \in R$ vale:
 \begin{itemize}
