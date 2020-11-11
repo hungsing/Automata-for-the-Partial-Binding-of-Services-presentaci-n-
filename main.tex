@@ -749,55 +749,56 @@ Tomemos el siguiente AFCA
 \vspace{\fill}
 \end{frame}
 
+%\begin{frame}{Equivalencia Comunicacional}
+%\vspace{\fill}
+%\hspace{-1cm}
+%\begin{tabular}{cc}
+%\begin{minipage}{0.5\textwidth}
+%Sean:
+%\begin{enumerate}
+%\item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
+%\item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
+%\end{enumerate}
+%\end{minipage}
+%&
+%\begin{minipage}{0.5\textwidth}
+%$$
+%\xymatrix@C=0.5em{
+%	1.\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & 3.\{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+%	  {1.||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  2. \widehat{\mathcal{A}} =& 4. M  \\
+%	  \emptyset
+%}
+%$$
+%\end{minipage}
+%\end{tabular}
+%
+%\begin{enumerate}
+%\setcounter{enumi}{2}
+%\item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
+%\item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
+%\end{enumerate}
+%\vspace{\fill}
+%\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
+%\vspace{\fill}
+%\end{frame}
+
 \begin{frame}{Equivalencia Comunicacional}
-\vspace{\fill}
-\hspace{-1cm}
-\begin{tabular}{cc}
-\begin{minipage}{0.5\textwidth}
 Sean:
 \begin{enumerate}
 \item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
 \item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
-\end{enumerate}
-\end{minipage}
-&
-\begin{minipage}{0.5\textwidth}
-$$
-\xymatrix@C=0.5em{
-	1.\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & 3.\{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
-	  {1.||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  2. \widehat{\mathcal{A}} =& 4. M  \\
-	  \emptyset
-}
-$$
-\end{minipage}
-\end{tabular}
-
-\begin{enumerate}
-\setcounter{enumi}{2}
 \item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
 \item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
 \end{enumerate}
-\vspace{\fill}
-\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
-\vspace{\fill}
-\end{frame}
-
-\begin{frame}{Equivalencia Comunicacional}
-Sean:
-\begin{enumerate}
-\item $\{\mathcal{A}\}_{1 \leq i \leq n}$ un conjunto de weak determinate AFCA sin transiciones de comunicación interna, tal que su composición $||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}$, también lo es
-\item $\widehat{\mathcal{A}}$ el sistema de transición etiquetado (LTS) que resulta de la proyección $\Tau(\mathcal{A})$
-\item sea el conjunto $\{M_i\}_{1 \leq i \leq n}$ de mCFSM correspondientes a cada uno de los AFCAs en $\{\mathcal{A}\}_{1 \leq i \leq n}$, y
-\item $M = \langle P, \mathcal{C}, {p_0}, [\delta] \rangle$ al LTS que representa la semántica del CS.
-\end{enumerate}
-\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
 $$
 \xymatrix@C=0.5em{
-	1.\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & 3.\{C_i\}_{i \in I}  \ar[d]_{(4)semantica}  \\
-	  {1.||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  2. \widehat{\mathcal{A}} =& 4. M  \\
+	(1)\{\mathcal{A}_i\}_{i \in I} \ar[rrr]_{\Pi} \ar[d]_{||} & & & (3)\{C_i\}_{i \in I}  \ar[d]_{semantica}  \\
+	  {(1)||_{i \in I}\{\mathcal{A}_i\}= \mathcal{A}} \ar[rr]_{\ \ \ \ \ \Tau(A)} \ar[d]_{\Pi} & &  (2)\widehat{\mathcal{A}} =& (4) M  \\
 	  \emptyset
 }
 $$
+\textbf{Luego $\widehat{\mathcal{A}}$ y $M$ son bisimilares}
+
 \end{frame}
 
 \begin{frame}{bisimilaridad}
